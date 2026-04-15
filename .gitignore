@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.whl
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Выходные аудио файлы
+output/
+output_batch/
+*.wav
+
+# Тестовые файлы
+test_*.wav
+test_*.txt
+test_console.wav
+test_batch.wav
+test_batch_input.txt
+
+# Логи
+*.log
+
+# Временные файлы
+tmp/
+temp/
