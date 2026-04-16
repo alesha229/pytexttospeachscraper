@@ -5,9 +5,25 @@ InWorld TTS Engine
 Поддерживает batch-обработку больших файлов с умным разбиением текста.
 
 Использование:
-    python tts_engine.py --text "Привет мир" --voice голос --output output.wav
-    python tts_engine.py --file input.txt --voice голос --output output.wav
+    python tts_engine.py --text "Привет мир" --voice Elena --output out.wav
+    python tts_engine.py --file input.txt --voice Dmitry --output out.wav
     python tts_engine.py --list-voices
+    python tts_engine.py --list-voices --lang-filter ru
+
+Вход:
+    - text (str): Текст для озвучки (или --file)
+    - voice (str): ID голоса или display name из voices.json (например, "Elena", "Dmitry")
+    - output (str): Путь к выходному WAV файлу
+    - max-chars (int): Максимум символов на фрагмент (по умолчанию 1000)
+
+Выход:
+    - output (str): WAV файл с аудио
+
+Доступные русские голоса:
+    - Elena: Clear, mid-range female voice
+    - Dmitry: Deep, gravelly male voice
+    - Nikolai: Deep, resonant male voice
+    - Svetlana: Soft, high-pitched female voice
 """
 
 import requests
@@ -283,7 +299,7 @@ def _fetch_audio_chunk(text: str, voice_id: str) -> Optional[bytes]:
     
     raw_audio_data = bytearray()
     
-    response = requests.post(URL, headers=HEADERS, cookies=COOKIES, json=payload, stream=True)
+    response = requests.post(URL, headers=HEADERS, cookies=COOKIES, json=payload, stream=True, timeout=60)
     
     if response.status_code != 200:
         raise Exception(f"Ошибка сервера: {response.status_code}")
@@ -301,6 +317,8 @@ def _fetch_audio_chunk(text: str, voice_id: str) -> Optional[bytes]:
                     raw_audio_data.extend(chunk_bytes[44:])
                 else:
                     raw_audio_data.extend(chunk_bytes)
+            elif "error" in data:
+                print(f"⚠ Ошибка от сервера: {data['error']}")
         except json.JSONDecodeError:
             continue
     

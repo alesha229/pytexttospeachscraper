@@ -1,0 +1,56 @@
+{
+  "title": "Финансовая свобода начинается сегодня",
+  "description": "Короткое видео о том, как начать вести бюджет и копить деньги.",
+  "total_duration_sec": 30,
+  "scenes": [
+    {
+      "scene_number": 1,
+      "start_time_sec": 0,
+      "duration_sec": 5,
+      "voiceover_text": "Хотите легко контролировать свои личные финансы и начать копить?",
+      "image_prompt": "A confident young professional holding a smartphone displaying a rising financial graph, modern office background, cinematic lighting, photorealistic",
+      "image_aspect_ratio": "IMAGE_ASPECT_RATIO_LANDSCAPE",
+      "image_model": "IMAGEN_3_5",
+      "image_seed": 101,
+      "mood": "Мотивирующее",
+      "transition": "cut"
+    },
+    {
+      "scene_number": 2,
+      "start_time_sec": 5,
+      "duration_sec": 5,
+      "voiceover_text": "Куда уходят ваши деньги и почему цели кажутся недостижимыми?",
+      "image_prompt": "Close up of hands letting golden sand slip through fingers transforming into silver coins, symbolic imagery, soft focus background, high quality",
+      "image_aspect_ratio": "IMAGE_ASPECT_RATIO_LANDSCAPE",
+      "image_model": "IMAGEN_3_5",
+      "image_seed": 202,
+      "mood": "Задумчивое",
+      "transition": "fade"
+    },
+    {
+      "scene_number": 3,
+      "start_time_sec": 10,
+      "duration_sec": 10,
+      "voiceover_text": "Секрет успеха прост: начните вести бюджет уже сегодня. Откладывайте минимум десять процентов от любого дохода и всегда избегайте импульсивных трат.",
+      "image_prompt": "Top view of a neat desk with an open planner showing budget calculations, a ceramic piggy bank, and a cup of coffee, warm sunlight, cozy atmosphere",
+      "image_aspect_ratio": "IMAGE_ASPECT_RATIO_LANDSCAPE",
+      "image_model": "IMAGEN_3_5",
+      "image_seed": 303,
+      "mood": "Спокойное",
+      "transition": "dissolve"
+    },
+    {
+      "scene_number": 4,
+      "start_time_sec": 20,
+      "duration_sec": 10,
+      "voiceover_text": "Ваше светлое финансовое будущее начинается именно с этого шага. Подписывайтесь на канал, чтобы узнавать больше секретов финансовой грамотности!",
+      "image_prompt": "A happy person planting a small tree that has coins as leaves, symbolizing financial growth, bright sunny day, realistic style",
+      "image_aspect_ratio": "IMAGE_ASPECT_RATIO_LANDSCAPE",
+      "image_model": "IMAGEN_3_5",
+      "image_seed": 404,
+      "mood": "Радостное",
+      "transition": "fade"
+    }
+  ],
+  "notes": "Убедитесь, что темп озвучки размеренный, с акцентами на ключевых словах."
+}

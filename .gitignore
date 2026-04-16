@@ -46,3 +46,6 @@ test_batch_input.txt
 # Временные файлы
 tmp/
 temp/
+node_modules/
+video_output/
+video_output_v2/
