@@ -206,7 +206,7 @@ class VideoGeneratorV2:
         
         # Шаг 7: Генерация превью
         print("\n🖼️ Шаг 7: Генерация кликбейтного превью...")
-        thumbnail_path = self._generate_thumbnail(topic, scenario.get("style", "mystery"))
+        thumbnail_path = self._generate_thumbnail(topic, scenario.get("style", "mystery"), video_base_dir)
         
         print("\n" + "="*60)
         print(f"✅ ВИДЕО V2 ГОТОВО: {video_path}")
@@ -822,31 +822,28 @@ class VideoGeneratorV2:
             fast=fast
         )
     
-    def _generate_thumbnail(self, topic: str, style: str) -> str:
+    def _generate_thumbnail(self, topic: str, style: str, video_base_dir: str) -> str:
         """Генерирует кликбейтное превью для видео"""
         if not self.thumbnail_generator:
             print("   ⚠ Генератор превью не инициализирован (нет Whisk cookie)")
             return None
         
         try:
-            # Маппинг стиля видео на стиль превью
-            style_map = {
-                "mystery": "mystery",
-                "horror": "horror",
-                "tech": "tech",
-                "drama": "drama",
-                "cinematic": "mystery",
-                "documentary": "mystery",
-                "tech_experimental": "tech"
-            }
+            # Создаем папку для превью внутри проекта
+            thumbnail_dir = os.path.join(video_base_dir, "thumbnail")
+            os.makedirs(thumbnail_dir, exist_ok=True)
             
-            thumb_style = style_map.get(style, "mystery")
+            # Временно меняем output_dir
+            original_dir = self.thumbnail_generator.output_dir
+            self.thumbnail_generator.output_dir = thumbnail_dir
             
+            # Передаем ТОЛЬКО тему - AI сам определит стиль по ключевым словам
             thumbnail_path = self.thumbnail_generator.generate_thumbnail(
-                topic=topic,
-                style=thumb_style,
-                text_overlay=True
+                topic=topic
             )
+            
+            # Возвращаем output_dir обратно
+            self.thumbnail_generator.output_dir = original_dir
             
             return thumbnail_path
         except Exception as e:

@@ -18,25 +18,22 @@ class ThumbnailGenerator:
     
     def generate_thumbnail(
         self,
-        topic: str,
-        style: str = "mystery"
+        topic: str
     ) -> str:
         """
         Генерирует кликбейтное превью полностью через AI
         
         Args:
             topic: Тема видео
-            style: Стиль (mystery, horror, tech, drama)
             
         Returns:
             Путь к превью
         """
-        # Создаем супер-кликбейтный промпт
-        prompt = self._create_clickbait_prompt(topic, style)
+        # Создаем супер-кликбейтный промпт на основе темы
+        prompt = self._create_clickbait_prompt(topic)
         
         print(f"\n🎨 Генерация кликбейтного превью...")
         print(f"   Тема: {topic}")
-        print(f"   Стиль: {style}")
         print(f"   Промпт: {prompt[:150]}...")
         
         generator = ImageGenerator(
@@ -72,76 +69,47 @@ class ThumbnailGenerator:
             print(f"❌ Ошибка генерации: {e}")
             return None
     
-    def _create_clickbait_prompt(self, topic: str, style: str) -> str:
-        """Создает идеальный кликбейтный промпт для AI"""
+    def _create_clickbait_prompt(self, topic: str) -> str:
+        """Создает промпт через LLM для идеального превью под тему"""
+        from video_scenario_planner_v2 import VideoScenarioPlannerV2
         
-        prompts = {
-            "mystery": f"""
-            YouTube thumbnail for viral video about "{topic}".
-            
-            SHOCKING face of a person with wide eyes and open mouth in foreground, extreme close-up, dramatic reaction.
-            
-            Background: mysterious dark atmosphere with glowing question marks, red arrows pointing to hidden details, blurred conspiracy elements.
-            
-            Style: MrBeast thumbnail style, high contrast, saturated colors, dramatic rim lighting, bokeh effect.
-            
-            Text elements: Large bold red text "SHOCKING TRUTH!" in Impact font, yellow arrow, red circle highlighting mystery.
-            
-            Colors: Dark blue, purple, neon accents, high saturation.
-            
-            Professional YouTube thumbnail, 8k, hyper-detailed, eye-catching, viral content.
-            """,
-            
-            "horror": f"""
-            YouTube thumbnail for horror video about "{topic}".
-            
-            TERRIFIED screaming face in extreme close-up, sweat drops, pupils dilated, pure fear expression.
-            
-            Background: Dark foggy forest at night, shadowy monster silhouette with glowing red eyes, blood splatters, eerie green mist.
-            
-            Style: Horror movie poster, dramatic shadows, red emergency lighting, dutch angle, claustrophobic atmosphere.
-            
-            Text elements: Bold red dripping text "DON'T WATCH!", broken glass effect, warning symbols.
-            
-            Colors: Blood red, pitch black, sickly green, high contrast.
-            
-            Terrifying YouTube thumbnail, nightmare fuel, 8k, cinematic horror.
-            """,
-            
-            "tech": f"""
-            YouTube thumbnail for tech video about "{topic}".
-            
-            EXCITED person pointing at futuristic holographic display, mind-blown expression, finger pointing at camera.
-            
-            Background: Cyberpunk interface with glowing data streams, neon circuit boards, holographic graphs showing "1000% INCREASE", floating tech icons.
-            
-            Style: Modern tech reviewer thumbnail, neon glow, clean composition, futuristic UI elements.
-            
-            Text elements: Bold cyan text "GAME CHANGER!", glowing arrows, percentage numbers in green.
-            
-            Colors: Electric blue, cyan, magenta, bright accents, neon glow.
-            
-            Professional tech thumbnail, cyberpunk aesthetic, 8k, hyper-detailed.
-            """,
-            
-            "drama": f"""
-            YouTube thumbnail for dramatic video about "{topic}".
-            
-            EMOTIONAL person with tears or intense anger, dramatic facial expression, hands on head in disbelief.
-            
-            Background: Golden hour lighting, epic landscape, lens flare, cinematic bokeh, leading lines to subject.
-            
-            Style: Drama movie poster, emotional climax moment, rule of thirds, shallow depth of field.
-            
-            Text elements: Bold white text with black outline "LIFE CHANGING!", dramatic subtitle, emotional symbols.
-            
-            Colors: Warm orange, deep red, golden yellow, rich tones, high saturation.
-            
-            Epic dramatic thumbnail, emotional impact, 8k, cinematic photography.
-            """
-        }
+        print(f"   🤖 Генерация промпта через AI...")
         
-        return prompts.get(style, prompts["mystery"]).strip()
+        # Создаем планировщик для запроса к LLM
+        planner = VideoScenarioPlannerV2()
+        
+        # Запрос на создание промпта
+        prompt_request = f"""
+        Create a detailed image generation prompt for a YouTube thumbnail about: "{topic}"
+        
+        Requirements:
+        - Eye-catching, viral-style thumbnail
+        - Bold text overlay in Russian
+        - High contrast, saturated colors
+        - Professional 8k quality
+        - MrBeast-style composition
+        
+        Return ONLY the image description prompt, no extra text.
+        """
+        
+        try:
+            # Получаем промпт от LLM
+            response = planner.client.chat.completions.create(
+                model="accounts/fireworks/models/qwen3p6-plus",
+                messages=[{"role": "user", "content": prompt_request}],
+                temperature=0.8,
+                max_tokens=200,
+                stream=False
+            )
+            
+            llm_prompt = response.choices[0].message.content.strip()
+            print(f"   ✅ AI промпт: {llm_prompt[:100]}...")
+            
+            return llm_prompt
+            
+        except Exception as e:
+            print(f"   ⚠ Ошибка LLM, используем базовый промпт: {e}")
+            return f"YouTube thumbnail about {topic}, viral style, bold text, 8k, high contrast"
 
 
 def main():
