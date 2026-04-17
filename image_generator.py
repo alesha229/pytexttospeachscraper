@@ -44,13 +44,13 @@ import requests
 # ⚙️ КОНФИГУРАЦИЯ
 # ============================================================
 CONFIG = {
-    "cookie": "__Host-next-auth.csrf-token=3c3b9bd21072e55bc77cbcd30bbbe964db7474c1900cbba972eb0f58ddb32338%7C1865653fb8ebe85f70e0fb3b3b92ee8984bb8f0a8c949c7e5f769f6fa8010021; _ga=GA1.1.1533113553.1776294974; __Secure-next-auth.callback-url=https%3A%2F%2Flabs.google%2Ffx%2Ftools%2Fwhisk%2Fproject; email=dfyz1231231231234%40gmail.com; EMAIL=%22dfyz1231231231234%40gmail.com%22; __Secure-next-auth.session-token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..dvDHf37w0V_wlkVg._lGth3rVM-SSxMwqGu1HmSovFnCbVIDYm957LiWM2nxz65Dhb3rXokFz7PuGbCjhcrlTCi-wLTpVV8zdChFrbWvrc8GToMMdtzfaHdFyO06xm5-kLQAzOCp1lGFoUSFd95braDQHrUsxhAaf0d7Z0IXTUvIdsSR_Jt3zjN88nOKfV0BAAjIW6r69lGTEQmUMjntQPb06sNzpkeM2B1Z-VkowZp7VOZSPR4hxvFmclCDPMxRpCUr8iOi2hgQ96xKbwVEELZD9Etsb8Ts3-3U_IRtRNvR1eCFpGZsBn_uOLfxQnIup3NbQufe-N5gcaSc_VAD8PAb_-CxV3OCogJFPlZ6wgdofZg_ZRh5UGCgT8J-uG_bJScP0MJ15dyMpJCei9ymTc13Rllfsa1lC1U31H6OJX1WJKgv8DHQO65euT7EN7j_pd8YrH3EPs1v1CdL8JWThU3wrfFdYnTJ9Q4tDDf_gtWgfbt3f2Rs8jUGv8m_-UlpQDOJPc4YxLJa1Lqax6vEL89YLQC9_-hr6fGvdLmI1jcTAdlg923KAdC8_XvaAzoEdRoUfPGhQSv7H3GiPDIp6cD1gr_CwQ3RFltwiRSiV0bl16QCGpsZgbfRJ9mSwXU2liUbcgN503km86rISnnkDTZ8aAXH8rODe3sM56qScZU8JYn9KQ8YG9gbo_bQd311E5VZRbfwr2vNKYJIH2zL8GbBha-lNbG9PpvfeU8K63xJoCAEjURqWfh0sFlxvI3dY9XUpCP8_FkvZcZ5Rhj-glgXmMEry6-wt-V5ADeMFFCGGy5J-pLSCo3m7O2K5n9VZaLJ3rGSYCGspUPySSKpxBoTlTg7oQ8yGKHYQJsPLOT6z3LRj-6K60oEWMpp_4yi6vjcotdW0dnob1Xv12ctprmtuyEt-yK8ZK7vwLJgvgKLu_xLmonaDj9wqyyEDdnTIcsX1029SehxGLmMKpIxYbqSzkCvnfnbbY-vyFNb6ruu8CHYXjqDn5J4rWBE.dTD42qkul4mIL_Ar_5Ho1w; _ga_X2GNH8R5NS=GS2.1.s1776332351$o2$g1$t1776332355$j56$l0$h1757230114",
-    "prompt": "крутой скелет играет на гитаре огонь",           # Описание изображения (или через аргумент / интерактивно)
-    "output_dir": "./image-output",  # Папка для сохранения изображений
-    "model": "IMAGEN_3_5",  # Модель: IMAGEN_3, IMAGEN_3_5, IMAGEN_4
-    "aspect_ratio": "IMAGE_ASPECT_RATIO_LANDSCAPE",  # IMAGE_ASPECT_RATIO_SQUARE, IMAGE_ASPECT_RATIO_PORTRAIT, IMAGE_ASPECT_RATIO_LANDSCAPE
-    "seed": 0,               # Seed (0 = случайный)
-    "count": 1,              # Количество изображений за раз (1-8)
+    "cookie": os.environ.get("WHISK_COOKIE", ""),
+    "prompt": "крутой скелет играет на гитаре огонь",
+    "output_dir": "./image-output",
+    "model": "IMAGEN_3_5",
+    "aspect_ratio": "IMAGE_ASPECT_RATIO_LANDSCAPE",
+    "seed": 0,
+    "count": 1,
 }
 # ============================================================
 

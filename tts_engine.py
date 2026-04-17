@@ -49,7 +49,7 @@ if sys.platform == "win32":
 URL = "https://inworld.ai/api/create-speech"
 
 COOKIES = {
-    "inworld_uid": "b9ac5a4c-a0fd-493a-9e07-930fc1ac3db1",
+    "inworld_uid": os.environ.get("INWORLD_UID", "b9ac5a4c-a0fd-493a-9e07-930fc1ac3db1"),
 }
 
 HEADERS = {

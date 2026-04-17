@@ -1,0 +1,25 @@
+Отчет создается: 
+	17.04.2026	16:34:25
+
+Имя проекта: ae_project.aep
+
+Исходные файлы, собранные в: 
+	C:\Users\alesha229\AppData\Local\Temp\aegraphic\895384a8-88df-449d-9e1d-7cbbfaeb42cd\collectprj
+
+Собранные исходные файлы: Для целевой композиции
+
+Собранные композиции:  
+	background_1
+	
+Количество собранных файлов: 3
+
+Размер собранных файлов: 1,6 МБ
+
+Собранные исходные файлы: 
+	E:\coding\pyttsscraper\src\video\video_output_v2\fly\assets\background_1.jpg
+	E:\coding\pyttsscraper\src\video\video_output_v2\fly\assets\background_5.jpg
+	E:\coding\pyttsscraper\src\video\video_output_v2\fly\assets\real_Yuri_Gagarin_webp.png
+	
+Подключаемые модули рендеринга:
+	Классический 3D
+	

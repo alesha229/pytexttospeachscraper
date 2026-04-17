@@ -1,0 +1,73 @@
+{
+  "transitions": {
+    "enabled": true,
+    "type": "cross_dissolve",
+    "duration": 0.8
+  },
+  "quote_template": {
+    "enabled": true,
+    "font": "Arial-BoldMT",
+    "font_size_quote": 44,
+    "font_size_name": 28,
+    "layout": "left_photo_right_text",
+    "background_opacity": 70,
+    "quote_color": [0.95, 0.95, 0.85],
+    "name_color": [0.7, 0.7, 0.8],
+    "photo_scale": 35,
+    "photo_position": "left"
+  },
+  "thesis_overlay": {
+    "enabled": true,
+    "fade_in": 0.5,
+    "fade_out": 0.5,
+    "font": "Arial-Black",
+    "font_size": 72,
+    "text_color": [1, 1, 1],
+    "background_enabled": true,
+    "background_color": [0, 0, 0, 180]
+  },
+  "real_photo_overlay": {
+    "enabled": true,
+    "search_source": "duckduckgo",
+    "scale": 35,
+    "position": "center",
+    "fade_duration": 0.5,
+    "border": true,
+    "shadow": true
+  },
+  "intro": {
+    "enabled": false,
+    "duration": 5,
+    "style": "dark_minimal",
+    "title_font": "Arial-Black",
+    "title_size": 80,
+    "subtitle_font": "ArialMT",
+    "subtitle_size": 36
+  },
+  "film_grain": {
+    "enabled": true,
+    "path": "src/video/templates/back.mp4",
+    "opacity": 15,
+    "blend_mode": "overlay",
+    "scale": 100
+  },
+  "ken_burns": {
+    "enabled": true,
+    "start_scale": 100,
+    "end_scale": 115,
+    "pan_x": 0,
+    "pan_y": 0
+  },
+  "background_music": {
+    "enabled": false,
+    "path": "",
+    "volume": 25
+  },
+  "logo": {
+    "enabled": true,
+    "path": "",
+    "position": "bottom_right",
+    "scale": 15,
+    "opacity": 80
+  }
+}

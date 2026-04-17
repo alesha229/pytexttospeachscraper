@@ -35,9 +35,11 @@ import json
 # ⚙️ КОНФИГУРАЦИЯ
 # ============================================================
 CONFIG = {
-    "pexels_api_key": "",
-    "unsplash_api_key": "",
-    "pixabay_api_key": "",
+    "pexels_api_key": os.environ.get("PEXELS_API_KEY", ""),
+    "unsplash_api_key": os.environ.get("UNSPLASH_API_KEY", ""),
+    "pixabay_api_key": os.environ.get("PIXABAY_API_KEY", ""),
+    "serpapi_key": os.environ.get("SERPAPI_KEY", ""),
+    "bing_api_key": os.environ.get("BING_API_KEY", ""),
     "output_dir": "./search_results",
     "default_count": 5,
     "default_orientation": "landscape",

@@ -67,11 +67,11 @@ from thumbnail_generator import ThumbnailGenerator
 # ⚙️ КОНФИГУРАЦИЯ
 # ============================================================
 CONFIG = {
-    "api_key": "fw_RHz4x8ZwqbsvKhyp1qkpR6",        # Fireworks AI API ключ (или через FIREWORKS_API_KEY)
-    "model": "accounts/fireworks/models/qwen3p6-plus",  # LLM модель
+    "api_key": os.environ.get("FIREWORKS_API_KEY", ""),
+    "model": "accounts/fireworks/models/qwen3p6-plus",
     "temperature": 0.7,
     "max_tokens": 4096,
-    "default_language": "ru",  # Язык сценария: ru, en
+    "default_language": "ru",
 }
 # ============================================================
 
