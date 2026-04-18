@@ -312,9 +312,10 @@ class ImageGenerator:
         aspect_ratio: str = "IMAGE_ASPECT_RATIO_LANDSCAPE",
         seed: int = 0,
         count: int = 1,
+        max_retries: int = 5,
     ) -> list:
         """
-        Генерация и сохранение изображений
+        Генерация и сохранение изображений с retry-логикой
         
         Args:
             prompt: Текстовое описание
@@ -322,6 +323,7 @@ class ImageGenerator:
             aspect_ratio: Соотношение сторон
             seed: Seed для воспроизводимости
             count: Количество изображений (1-8)
+            max_retries: Максимальное количество попыток при ошибке
             
         Returns:
             Список путей к сохранённым файлам
@@ -333,38 +335,51 @@ class ImageGenerator:
         print(f"   Seed: {seed}")
         print(f"   Количество: {count}")
         
-        # Аутентификация
-        print(f"🔐 Аутентификация...")
-        self.api.refresh_auth()
-        print(f"   Успешно!")
+        for attempt in range(1, max_retries + 1):
+            try:
+                print(f"🔐 Аутентификация...")
+                self.api.refresh_auth()
+                print(f"   Успешно!")
+                
+                print(f"⏳ Генерация (попытка {attempt}/{max_retries})...")
+                images = self.api.generate_image(
+                    prompt=prompt,
+                    model=model,
+                    aspect_ratio=aspect_ratio,
+                    seed=seed,
+                    count=count,
+                )
+                
+                if not images:
+                    print(f"❌ Изображения не сгенерированы (попытка {attempt}/{max_retries})")
+                    if attempt < max_retries:
+                        wait = attempt * 2
+                        print(f"   ⏳ Повторная попытка через {wait}с...")
+                        time.sleep(wait)
+                    continue
+                
+                saved_paths = []
+                for i, img in enumerate(images, 1):
+                    timestamp = int(time.time())
+                    filename = f"generated_{timestamp}_{img['seed']}_{i}.png"
+                    filepath = self.output_dir / filename
+                    
+                    print(f"💾 Сохранение изображения {i}/{len(images)}...")
+                    self.api.download_image_from_base64(img["encoded_media"], filepath)
+                    saved_paths.append(str(filepath))
+                    print(f"   ✅ {filepath}")
+                
+                return saved_paths
+                
+            except Exception as e:
+                print(f"❌ Ошибка при генерации (попытка {attempt}/{max_retries}): {e}")
+                if attempt < max_retries:
+                    wait = attempt * 2
+                    print(f"   ⏳ Повторная попытка через {wait}с...")
+                    time.sleep(wait)
         
-        # Генерация изображений
-        print(f"⏳ Генерация...")
-        images = self.api.generate_image(
-            prompt=prompt,
-            model=model,
-            aspect_ratio=aspect_ratio,
-            seed=seed,
-            count=count,
-        )
-        
-        if not images:
-            print(f"❌ Ошибка: изображения не сгенерированы")
-            return []
-        
-        # Сохранение файлов
-        saved_paths = []
-        for i, img in enumerate(images, 1):
-            timestamp = int(time.time())
-            filename = f"generated_{timestamp}_{img['seed']}_{i}.png"
-            filepath = self.output_dir / filename
-            
-            print(f"💾 Сохранение изображения {i}/{len(images)}...")
-            self.api.download_image_from_base64(img["encoded_media"], filepath)
-            saved_paths.append(str(filepath))
-            print(f"   ✅ {filepath}")
-        
-        return saved_paths
+        print(f"❌ Не удалось сгенерировать изображение за {max_retries} попыток")
+        return []
 
 
 def parse_args():

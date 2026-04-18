@@ -40,6 +40,7 @@ from pathlib import Path
 from src.planning import VideoScenarioPlannerV2
 from src.images import ImageGenerator, WhiskAPI
 from src.images import ImageSearch
+from src.images import ImageValidator
 from src.tts import tts, COOKIES as TTS_COOKIES
 from src.video.video_assembler_fast import FastVideoAssembler, VideoScene
 from src.images import ThumbnailGenerator
@@ -63,7 +64,8 @@ class VideoGeneratorV2:
         inworld_cookies: dict = None,
         pexels_api_key: str = None,
         use_real_photos: bool = True,
-        use_stock_photos: bool = False
+        use_stock_photos: bool = False,
+        validate_images: bool = True
     ):
         """
         Инициализация генератора
@@ -75,12 +77,14 @@ class VideoGeneratorV2:
             pexels_api_key: API ключ для Pexels (сток)
             use_real_photos: Использовать реальные фото/скриншоты (DuckDuckGo)
             use_stock_photos: Использовать стоковые фото (Pexels)
+            validate_images: Валидировать изображения через Qwen VL
         """
         self.fireworks_api_key = fireworks_api_key
         self.whisk_cookie = whisk_cookie or os.environ.get("WHISK_COOKIE", "")
         self.inworld_cookies = inworld_cookies
         self.use_real_photos = use_real_photos
         self.use_stock_photos = use_stock_photos
+        self.validate_images = validate_images
         
         self.scenario_planner = VideoScenarioPlannerV2(api_key=fireworks_api_key)
         self.image_generator = None
@@ -95,11 +99,22 @@ class VideoGeneratorV2:
                 output_dir=os.path.join(OUTPUT_DIR, "thumbnails")
             )
         
+        # Инициализируем валидатор изображений
+        self.validator = None
+        if self.validate_images and self.fireworks_api_key:
+            try:
+                self.validator = ImageValidator(api_key=self.fireworks_api_key)
+                print("   ✅ Валидатор изображений (Qwen VL) инициализирован")
+            except ValueError:
+                self.validator = None
+                print("   ⚠ Не удалось инициализировать валидатор (нет API ключа)")
+        
         # Инициализируем поиск изображений
         try:
             self.image_search = ImageSearch(
                 pexels_key=pexels_api_key,
-                use_duckduckgo=use_real_photos
+                use_duckduckgo=use_real_photos,
+                validator=self.validator
             )
             self.has_image_search = True
         except ValueError:
@@ -180,13 +195,23 @@ class VideoGeneratorV2:
         print("\n📦 Шаг 2: Обработка ассетов...")
         assets_map = self._process_assets_manifest(scenario, assets_dir)
         
-        # Шаг 3: Генерация фоновых изображений
-        print("\n🎨 Шаг 3: Генерация фоновых изображений...")
-        background_paths = self._generate_backgrounds(scenario, assets_dir, assets_map)
+        # Шаг 2+3 параллельно: озвучка в фоне, фоны в основном потоке
+        from concurrent.futures import ThreadPoolExecutor, Future
         
-        # Шаг 4: Генерация аудио
-        print("\n🎙️ Шаг 4: Генерация озвучки...")
-        audio_paths = self._generate_audio(scenario, audio_dir)
+        audio_future = None
+        with ThreadPoolExecutor(max_workers=1) as audio_pool:
+            print("\n🎙️ Запуск озвучки в фоне...")
+            audio_future = audio_pool.submit(self._generate_audio, scenario, audio_dir)
+            
+            # Шаг 3: Генерация фоновых изображений (в основном потоке)
+            print("\n🎨 Шаг 3: Генерация фоновых изображений...")
+            background_paths = self._generate_backgrounds(scenario, assets_dir, assets_map)
+        
+        # Дожидаемся озвучку если ещё не готова
+        print("\n🎙️ Ожидание завершения озвучки...")
+        audio_paths = audio_future.result() if audio_future else {}
+        
+        # Шаг 4 (пропускаем — уже сделано параллельно)
         
         # Шаг 5: Создание оверлеев
         print("\n📝 Шаг 5: Создание оверлеев...")
@@ -217,10 +242,89 @@ class VideoGeneratorV2:
         
         return video_path
     
+    def _download_first_available(self, results: list, api, save_path: str) -> Optional[str]:
+        """Пробует скачать изображения по очереди, пока одно не получится."""
+        for idx, result in enumerate(results):
+            url = result.get("download_url", "")
+            if not url:
+                continue
+            try:
+                api.download(url, save_path)
+                return save_path
+            except Exception as e:
+                print(f"      ⚠ Ошибка скачивания ({idx+1}/{len(results)}): {e}")
+                continue
+        return None
+
+    def _search_person_photo(self, name: str, desc: str, assets_dir: str, filename_prefix: str) -> Optional[str]:
+        """
+        Ищет фото персоны из интернета с несколькими попытками и разными запросами.
+        Для персон НИКОГДА не используется Whisk (запрещает генерацию личностей).
+        """
+        queries = [
+            desc or name,
+            name,
+            f"{name} portrait",
+            f"{name} photo",
+        ]
+        seen = set(q.lower() for q in queries)
+        
+        parts = name.strip().split()
+        if len(parts) >= 2:
+            extra = [f"{parts[0]} {parts[-1]}", f"{parts[-1]} {parts[0]}"]
+            for q in extra:
+                if q.lower() not in seen:
+                    queries.append(q)
+                    seen.add(q.lower())
+        
+        for qi, search_query in enumerate(queries):
+            if not search_query:
+                continue
+            print(f"   📸 Попытка {qi+1}/{len(queries)}: '{search_query}'")
+            try:
+                if self.use_real_photos and self.has_image_search and "real" in self.image_search.services:
+                    results = self.image_search.search_person(
+                        name=search_query,
+                        source="real",
+                        count=1
+                    )
+                    if results:
+                        real_api = self.image_search.services.get("real")
+                        if real_api:
+                            asset_path = os.path.join(assets_dir, f"{filename_prefix}.jpg")
+                            downloaded = self._download_first_available(results, real_api, asset_path)
+                            if downloaded:
+                                print(f"   ✅ Найдено фото персоны (попытка {qi+1})")
+                                return downloaded
+                
+                if self.use_stock_photos and self.has_image_search and "pexels" in self.image_search.services:
+                    results = self.image_search.search(
+                        query=search_query,
+                        source="stock",
+                        stock_service="pexels",
+                        count=1,
+                        orientation="portrait"
+                    )
+                    if results:
+                        stock_api = self.image_search.services.get("pexels")
+                        if stock_api:
+                            asset_path = os.path.join(assets_dir, f"{filename_prefix}.jpg")
+                            downloaded = self._download_first_available(results, stock_api, asset_path)
+                            if downloaded:
+                                print(f"   ✅ Найдено стоковое фото персоны (попытка {qi+1})")
+                                return downloaded
+            except Exception as e:
+                print(f"   ⚠ Ошибка поиска (попытка {qi+1}): {e}")
+        
+        print(f"   ❌ Не удалось найти фото персоны из интернета")
+        return None
+
     def _process_assets_manifest(self, scenario: dict, assets_dir: str) -> dict:
         """
         Обрабатывает assets_manifest для предварительной загрузки ассетов
-        Приоритет: сток (Pexels) > реальные (DuckDuckGo) > генерация Whisk
+        Приоритет: 
+          - person: ТОЛЬКО интернет (DuckDuckGo/Pexels), Whisk запрещает генерацию личностей
+          - остальные: сток (Pexels) > реальные (DuckDuckGo) > генерация Whisk
         """
         assets_map = {}
         manifest = scenario.get("assets_manifest", [])
@@ -231,14 +335,14 @@ class VideoGeneratorV2:
         
         print(f"   📦 Найдено {len(manifest)} ассетов для обработки")
         
-        # Нормализация манифеста
         normalized_manifest = []
         for asset in manifest:
             if isinstance(asset, str):
                 normalized_manifest.append({
                     "type": "object",
                     "name": asset,
-                    "description": ""
+                    "description": "",
+                    "search_query": ""
                 })
             elif isinstance(asset, dict):
                 normalized_manifest.append(asset)
@@ -260,55 +364,79 @@ class VideoGeneratorV2:
             
             asset_found = False
             
-            # 1. Если включен use_stock_photos и есть ключ Pexels - ищем сток
-            if self.use_stock_photos and self.has_image_search and "pexels" in self.image_search.services:
-                try:
-                    search_term = search_query or asset_desc or asset_name
-                    print(f"   🔍 Поиск стокового фото (Pexels): {search_term}")
-                    results = self.image_search.search(
-                        query=search_term,
-                        source="stock",
-                        stock_service="pexels",
-                        count=1,
-                        orientation="landscape"
-                    )
-                    if results:
-                        stock_api = self.image_search.services.get("pexels")
-                        if stock_api:
-                            asset_path = os.path.join(assets_dir, f"stock_{safe_file_name}.jpg")
-                            stock_api.download(results[0]["download_url"], asset_path)
-                            print(f"   ✅ Найдено стоковое фото")
-                            assets_map[asset_name] = asset_path
-                            asset_found = True
-                except Exception as e:
-                    print(f"   ⚠ Не удалось найти стоковое фото: {e}")
+            # person — ТОЛЬКО из интернета, Whisk не подходит
+            if asset_type == "person":
+                prefix = f"person_{safe_file_name}"
+                result = self._search_person_photo(search_query or asset_name, asset_desc, assets_dir, prefix)
+                if result:
+                    assets_map[asset_name] = result
+                    asset_found = True
+                else:
+                    print(f"   🖼️ Создаю плейсхолдер для персоны")
+                    assets_map[asset_name] = self._create_person_placeholder(asset_name, asset_desc, assets_dir)
+                    asset_found = True
             
-            # 2. Если не нашли сток и включены реальные фото - ищем в DuckDuckGo
-            if not asset_found and self.use_real_photos and self.has_image_search and "real" in self.image_search.services:
-                try:
-                    search_term = search_query or asset_name
-                    print(f"   📸 Поиск реального фото (DuckDuckGo): {search_term}")
-                    results = self.image_search.search_person(
-                        name=search_term,
-                        source="real",
-                        count=1
-                    )
-                    if results:
-                        real_api = self.image_search.services.get("real")
-                        if real_api:
-                            asset_path = os.path.join(assets_dir, f"real_{safe_file_name}.jpg")
-                            real_api.download(results[0]["download_url"], asset_path)
-                            print(f"   ✅ Найдено реальное фото")
-                            assets_map[asset_name] = asset_path
-                            asset_found = True
-                except Exception as e:
-                    print(f"   ⚠ Не удалось найти реальное фото: {e}")
+            # Не-person: сток > DuckDuckGo > Whisk
+            if not asset_found:
+                if self.use_stock_photos and self.has_image_search and "pexels" in self.image_search.services:
+                    try:
+                        search_term = search_query or asset_desc or asset_name
+                        print(f"   🔍 Поиск стокового фото (Pexels): {search_term}")
+                        results = self.image_search.search(
+                            query=search_term,
+                            source="stock",
+                            stock_service="pexels",
+                            count=1,
+                            orientation="landscape"
+                        )
+                        if results:
+                            stock_api = self.image_search.services.get("pexels")
+                            if stock_api:
+                                asset_path = os.path.join(assets_dir, f"stock_{safe_file_name}.jpg")
+                                downloaded = self._download_first_available(results, stock_api, asset_path)
+                                if downloaded:
+                                    print(f"   ✅ Найдено стоковое фото")
+                                    assets_map[asset_name] = downloaded
+                                    asset_found = True
+                                else:
+                                    print(f"   ⚠ Ни одно стоковое фото не скачалось")
+                    except Exception as e:
+                        print(f"   ⚠ Не удалось найти стоковое фото: {e}")
+                
+                if not asset_found and self.use_real_photos and self.has_image_search and "real" in self.image_search.services:
+                    try:
+                        search_term = search_query or asset_desc or asset_name
+                        print(f"   📸 Поиск реального фото (DuckDuckGo): {search_term}")
+                        if asset_type == "location":
+                            results = self.image_search.search_location(
+                                name=search_term,
+                                source="real",
+                                count=1
+                            )
+                        else:
+                            results = self.image_search.search(
+                                query=search_term,
+                                source="real",
+                                count=1
+                            )
+                        if results:
+                            real_api = self.image_search.services.get("real")
+                            if real_api:
+                                asset_path = os.path.join(assets_dir, f"real_{safe_file_name}.jpg")
+                                downloaded = self._download_first_available(results, real_api, asset_path)
+                                if downloaded:
+                                    print(f"   ✅ Найдено реальное фото")
+                                    assets_map[asset_name] = downloaded
+                                    asset_found = True
+                                else:
+                                    print(f"   ⚠ Ни одно реальное фото не скачалось")
+                    except Exception as e:
+                        print(f"   ⚠ Не удалось найти реальное фото: {e}")
             
-            # 3. Fallback: генерация через Whisk
             if not asset_found:
                 print(f"   🎨 Генерация изображения через Whisk...")
                 clean_prompt = self._clean_prompt_for_whisk(asset_name, asset_desc, asset_type)
-                asset_path = self._generate_image_with_whisk(clean_prompt, hash(asset_name) % 10000, assets_dir)
+                asset_path = self._generate_image_with_whisk(clean_prompt, hash(asset_name) % 10000, assets_dir, asset_type=asset_type)
                 assets_map[asset_name] = asset_path
         
         return assets_map
@@ -452,10 +580,8 @@ class VideoGeneratorV2:
     def _generate_backgrounds(self, scenario: dict, assets_dir: str, assets_map: dict) -> dict:
         """
         Генерирует фоновые изображения для всех блоков timeline
-        Приоритет: генерация Whisk (основное) > реальные фото (для персон) > сток (для примеров)
-        
-        Returns:
-            Dict {block_index: background_path}
+        person_photo: ТОЛЬКО из интернета (Whisk запрещает личности)
+        Остальные: генерация Whisk > реальные фото > сток
         """
         background_paths = {}
         timeline = scenario.get("timeline", [])
@@ -473,35 +599,29 @@ class VideoGeneratorV2:
             print(f"   🎨 Блок {i+1}: {bg_type} - {bg_prompt[:50]}...")
             
             try:
-                # 1. Для персон сначала ищем реальные фото
+                # 1. person_photo — ТОЛЬКО интернет, без Whisk
                 if bg_type == "person_photo":
                     person_name = bg_prompt.split(":")[0] if ":" in bg_prompt else bg_prompt
                     
-                    # Проверяем assets_map (уже загруженные)
                     if person_name in assets_map:
                         background_paths[i] = assets_map[person_name]
                         print(f"   ✅ Использовано фото из ассетов")
                         continue
                     
-                    # Ищем реальные фото
-                    if self.use_real_photos and self.has_image_search:
-                        print(f"   📸 Поиск реального фото персоны: {person_name}")
-                        search_term = block.get("overlays", [{}])[0].get("search_query", person_name) if block.get("overlays") else person_name
-                        results = self.image_search.search_person(
-                            name=search_term,
-                            source="real",
-                            count=1
-                        )
-                        if results:
-                            real_api = self.image_search.services.get("real")
-                            if real_api:
-                                asset_path = os.path.join(assets_dir, f"bg_real_person_{i+1}.jpg")
-                                real_api.download(results[0]["download_url"], asset_path)
-                                background_paths[i] = asset_path
-                                print(f"   ✅ Найдено реальное фото")
-                                continue
+                    search_term = block.get("overlays", [{}])[0].get("search_query", person_name) if block.get("overlays") else person_name
+                    result = self._search_person_photo(
+                        search_term or person_name, bg_prompt, assets_dir,
+                        f"bg_person_{i+1}"
+                    )
+                    if result:
+                        background_paths[i] = result
+                        continue
+                    
+                    print(f"   🖼️ Создаю плейсхолдер для персоны")
+                    background_paths[i] = self._create_person_placeholder(person_name, bg_prompt, assets_dir)
+                    continue
                 
-                # 2. Для stock_photo ищем сток (если включен)
+                # 2. stock_photo
                 if bg_type == "stock_photo":
                     if self.use_stock_photos and self.has_image_search and "pexels" in self.image_search.services:
                         print(f"   🔍 Поиск стокового фото (Pexels): {bg_prompt}")
@@ -516,16 +636,17 @@ class VideoGeneratorV2:
                             stock_api = self.image_search.services.get("pexels")
                             if stock_api:
                                 asset_path = os.path.join(assets_dir, f"bg_stock_{i+1}.jpg")
-                                stock_api.download(results[0]["download_url"], asset_path)
-                                background_paths[i] = asset_path
-                                print(f"   ✅ Найдено стоковое фото")
-                                continue
+                                downloaded = self._download_first_available(results, stock_api, asset_path)
+                                if downloaded:
+                                    background_paths[i] = downloaded
+                                    print(f"   ✅ Найдено стоковое фото")
+                                    continue
+                        print(f"   ⚠ Стоковое фото не скачалось, генерируем...")
                 
-                # 3. Для generated_image или если поиск не удался - генерируем
+                # 3. generated_image или fallback — Whisk
                 print(f"   ⏳ Генерация изображения через Whisk...")
-                # Очищаем промпт перед отправкой в Whisk (особенно важно для персон)
                 clean_bg_prompt = self._clean_prompt_for_whisk(bg_prompt.split(":")[0] if ":" in bg_prompt else "", bg_prompt, bg_type)
-                background_paths[i] = self._generate_image_with_whisk(clean_bg_prompt, i+1, assets_dir)
+                background_paths[i] = self._generate_image_with_whisk(clean_bg_prompt, i+1, assets_dir, asset_type=bg_type)
                 
             except Exception as e:
                 print(f"   ❌ Ошибка: {e}")
@@ -535,16 +656,53 @@ class VideoGeneratorV2:
         
         return background_paths
     
-    def _generate_image_with_whisk(self, prompt: str, block_index: int, assets_dir: str) -> str:
-        """Генерирует изображение через Whisk API"""
+    def _generate_image_with_whisk(self, prompt: str, block_index: int, assets_dir: str, asset_type: str = None) -> str:
+        """Генерирует изображение через Whisk API. При ошибке фильтра персон — повтор с обобщённым промптом."""
         print(f"   ⏳ Генерация изображения для блока {block_index}...")
-        saved_paths = self.image_generator.generate(
-            prompt=prompt,
-            model="IMAGEN_3_5",
-            aspect_ratio="IMAGE_ASPECT_RATIO_LANDSCAPE",
-            seed=0,
-            count=1
-        )
+        try:
+            saved_paths = self.image_generator.generate(
+                prompt=prompt,
+                model="IMAGEN_3_5",
+                aspect_ratio="IMAGE_ASPECT_RATIO_LANDSCAPE",
+                seed=0,
+                count=1
+            )
+        except Exception as e:
+            err = str(e).upper()
+            if "PROMINENT_PEOPLE" in err or "PEOPLE_FILTER" in err or "PUBLIC_ERROR" in err:
+                print(f"   ⚠ Whisk заблокировал промпт (фильтр персон), повтор без имени...")
+                generic = self._anonymize_prompt(prompt, asset_type)
+                if generic != prompt:
+                    try:
+                        saved_paths = self.image_generator.generate(
+                            prompt=generic,
+                            model="IMAGEN_3_5",
+                            aspect_ratio="IMAGE_ASPECT_RATIO_LANDSCAPE",
+                            seed=0,
+                            count=1
+                        )
+                    except Exception as e2:
+                        print(f"   ⚠ Повторная генерация тоже заблокирована: {e2}")
+                        saved_paths = []
+                else:
+                    saved_paths = []
+            elif "400" in str(e):
+                print(f"   ⚠ Whisk 400 ошибка, повтор с упрощённым промптом...")
+                simplified = self._simplify_prompt(prompt)
+                try:
+                    saved_paths = self.image_generator.generate(
+                        prompt=simplified,
+                        model="IMAGEN_3_5",
+                        aspect_ratio="IMAGE_ASPECT_RATIO_LANDSCAPE",
+                        seed=0,
+                        count=1
+                    )
+                except Exception as e2:
+                    print(f"   ⚠ Упрощённый промпт тоже не прошёл: {e2}")
+                    saved_paths = []
+            else:
+                print(f"   ❌ Ошибка генерации Whisk: {e}")
+                return self._create_placeholder_image(block_index - 1, assets_dir)
         
         if saved_paths:
             old_path = saved_paths[0]
@@ -558,6 +716,29 @@ class VideoGeneratorV2:
         else:
             print(f"   ❌ Ошибка генерации изображения для блока {block_index}")
             return self._create_placeholder_image(block_index - 1, assets_dir)
+    
+    def _anonymize_prompt(self, prompt: str, asset_type: str = None) -> str:
+        """Заменяет конкретные имена в промпте на обобщённое описание."""
+        import re
+        if asset_type == "person" or asset_type == "person_photo":
+            return "A professional portrait of a person in a studio setting, neutral background, photorealistic"
+        
+        if ":" in prompt:
+            after_colon = ":".join(prompt.split(":")[1:]).strip()
+            if after_colon:
+                return after_colon
+        
+        prompt = re.sub(r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)+\b', 'a person', prompt)
+        return prompt
+    
+    def _simplify_prompt(self, prompt: str) -> str:
+        """Упрощает промпт для Whisk — убирает сложные конструкции."""
+        import re
+        simplified = re.sub(r'[^\w\s,.-]', '', prompt)
+        words = simplified.split()
+        if len(words) > 20:
+            simplified = ' '.join(words[:20])
+        return simplified.strip()
     
     def _create_stock_placeholder(self, prompt: str, assets_dir: str) -> str:
         """Создает placeholder для stock video"""
@@ -630,7 +811,7 @@ class VideoGeneratorV2:
             audio_path = os.path.join(audio_dir, f"block_{i+1}.wav")
             
             # Используем русский голос
-            voice_id = "Dmitry"
+            voice_id = "Blake"
             
             try:
                 print(f"  🎙️ Озвучка блока {i+1}...")
@@ -875,7 +1056,7 @@ def main():
     
     parser = argparse.ArgumentParser(description="Генератор видео V2 из текстового описания")
     parser.add_argument("topic", nargs="?", help="Тема видео")
-    parser.add_argument("--language", "-l", default="ru", help="Язык озвучки (ru, en)")
+    parser.add_argument("--language", "-l", default="en", help="Language (en, ru)")
     parser.add_argument("--duration", "-d", type=int, default=30, help="Длительность (сек)")
     parser.add_argument("--style", "-s", help="Стиль видео")
     parser.add_argument("--scenes", "-n", type=int, help="Количество сцен")

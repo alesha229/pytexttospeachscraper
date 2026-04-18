@@ -304,7 +304,7 @@ class PixabayAPI:
 class DuckDuckGoImageSearch:
     """Клиент для поиска изображений через DuckDuckGo (бесплатно, без ключей)"""
     
-    def __init__(self):
+    def __init__(self, validator=None):
         self.session = requests.Session()
         self.session.headers.update({
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
@@ -312,20 +312,38 @@ class DuckDuckGoImageSearch:
             "Accept-Language": "en-US,en;q=0.9",
             "Referer": "https://www.google.com/"
         })
+        self.validator = validator
     
-    def search(self, query: str, count: int = 5, orientation: str = "landscape") -> List[Dict]:
+    def search(self, query: str, count: int = 5, orientation: str = "landscape", validate: bool = None) -> List[Dict]:
         """
-        Поиск изображений через DuckDuckGo с повторными попытками при rate limit
-        """
-        results = []
-        max_retries = 3
-        retry_delay = 2  # секунды
+        Поиск изображений через DuckDuckGo с повторными попытками при rate limit.
         
+        Если включена валидация (validate=True и есть validator), каждый результат
+        проверяется через Qwen VL — неподходящие отбрасываются, поиск продолжается.
+        """
+        use_validation = validate if validate is not None else bool(self.validator)
+        
+        if use_validation and not self.validator:
+            print("   ⚠ Валидация запрошена, но validator не инициализирован. Пропускаем валидацию.")
+            use_validation = False
+        
+        if use_validation:
+            print(f"   🧪 Валидация Qwen VL: ВКЛЮЧЕНА (запрос='{query}')")
+        else:
+            print(f"   🔍 Валидация: выключена (обычный поиск)")
+        
+        max_retries = 3
+        retry_delay = 2
+        
+        if use_validation:
+            return self._search_with_validation(query, count, max_retries, retry_delay)
+        
+        results = []
         for attempt in range(max_retries):
             try:
                 with DDGSearch() as ddgs:
                     ddgs_results = list(ddgs.images(
-                        query,  # Используем позиционный аргумент
+                        query,
                         region='wt-wt',
                         safesearch='off',
                         max_results=min(count, 10)
@@ -372,8 +390,131 @@ class DuckDuckGoImageSearch:
         
         return results
     
+    def _search_with_validation(self, query: str, count: int, max_retries: int, retry_delay: int) -> List[Dict]:
+        """Поиск с валидацией: проверяем картинки через Qwen VL в параллели."""
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+
+        validated_results = []
+        all_seen_urls = set()
+        attempts = 0
+        max_total = count * 4
+        consecutive_empty_batches = 0
+        max_workers = 3
+
+        print(f"   🧪 ══════════════════════════════════════════")
+        print(f"   🧪 ПОИСК С ВАЛИДАЦИЕЙ QWEN VL: '{query}'")
+        print(f"   🧪 Нужно валидных: {count}, макс попыток: {max_total}, потоков: {max_workers}")
+        print(f"   🧪 ══════════════════════════════════════════")
+
+        while len(validated_results) < count and attempts < max_total:
+            remaining = count - len(validated_results)
+            batch_size = min(remaining + max_workers + 2, 10)
+            attempts += batch_size
+
+            ddgs_results = []
+            for attempt in range(max_retries):
+                try:
+                    with DDGSearch() as ddgs:
+                        ddgs_results = list(ddgs.images(
+                            query,
+                            region='wt-wt',
+                            safesearch='off',
+                            max_results=batch_size,
+                        ))
+                    break
+                except Exception as e:
+                    error_msg = str(e)
+                    if "403" in error_msg or "Ratelimit" in error_msg:
+                        if attempt < max_retries - 1:
+                            wait_time = retry_delay * (attempt + 1)
+                            print(f"   ⏳ Rate limit. Повтор через {wait_time}с...")
+                            time.sleep(wait_time)
+                        else:
+                            print(f"   ⚠ Rate limit. Прерываем валидацию.")
+                            return validated_results
+                    else:
+                        print(f"   ⚠ Ошибка поиска: {e}")
+                        return validated_results
+
+            if not ddgs_results:
+                print(f"   ⚠ DuckDuckGo не вернул результатов")
+                break
+
+            new_images = []
+            for img in ddgs_results:
+                url = img.get("image", "")
+                if url and url not in all_seen_urls:
+                    all_seen_urls.add(url)
+                    new_images.append(img)
+
+            if not new_images:
+                consecutive_empty_batches += 1
+                if consecutive_empty_batches >= 2:
+                    print(f"   ⚠ Нет новых результатов, все уже проверены. Прерываем.")
+                    break
+                print(f"   ⚠ Все результаты уже проверены, пробуем ещё раз...")
+                time.sleep(3)
+                continue
+            else:
+                consecutive_empty_batches = 0
+
+            print(f"   🔍 DuckDuckGo вернул {len(ddgs_results)} изображений ({len(new_images)} новых), валидация в {max_workers} потоков...")
+
+            def _validate_one(img):
+                image_url = img.get("image", "")
+                validation = self.validator.validate(image_url=image_url, query=query)
+                is_match = validation["match"] and validation["confidence"] >= self.validator.confidence_threshold
+                return img, validation, is_match
+
+            with ThreadPoolExecutor(max_workers=max_workers) as pool:
+                futures = {pool.submit(_validate_one, img): img for img in new_images}
+                for future in as_completed(futures):
+                    if len(validated_results) >= count:
+                        pool.shutdown(wait=False, cancel_futures=True)
+                        break
+                    try:
+                        img, validation, is_match = future.result()
+                    except Exception as e:
+                        print(f"   ⚠ Ошибка в потоке: {e}")
+                        continue
+
+                    image_url = img.get("image", "")
+                    status = "✅ ПОДХОДИТ" if is_match else "❌ НЕ ПОДХОДИТ"
+                    print(f"   🧪 {status}: {image_url[:60]}... ({validation.get('description', '')[:40]})")
+
+                    if is_match:
+                        validated_results.append({
+                            "id": str(hash(image_url)),
+                            "source": "duckduckgo",
+                            "source_type": "real",
+                            "url": img.get("url", ""),
+                            "photographer": img.get("source", "Unknown"),
+                            "width": 0,
+                            "height": 0,
+                            "alt": img.get("title", ""),
+                            "src": {
+                                "original": image_url,
+                                "large": image_url,
+                                "medium": img.get("thumbnail", ""),
+                                "small": img.get("thumbnail", ""),
+                            },
+                            "download_url": image_url,
+                            "is_real": True,
+                            "validation": validation,
+                            "validated": True,
+                        })
+
+            if len(validated_results) < count:
+                print(f"   🔄 Валидных: {len(validated_results)}/{count}, ищем дальше...")
+                time.sleep(2)
+
+        print(f"   🧪 ══════════════════════════════════════════")
+        print(f"   🧪 ИТОГО ВАЛИДАЦИИ: {len(validated_results)}/{count} изображений прошло проверку")
+        print(f"   🧪 ══════════════════════════════════════════")
+        return validated_results
+    
     def download(self, photo_url: str, save_path: str) -> str:
-        """Скачивает изображение по URL с эмуляцией браузера"""
+        """Скачивает изображение по URL с эмуляцией браузера, конвертирует в jpg если нужно"""
         try:
             headers = {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
@@ -384,9 +525,44 @@ class DuckDuckGoImageSearch:
             response = requests.get(photo_url, headers=headers, stream=True, timeout=30)
             response.raise_for_status()
             
-            with open(save_path, 'wb') as f:
-                for chunk in response.iter_content(8192):
-                    f.write(chunk)
+            content_type = response.headers.get("Content-Type", "").lower()
+            needs_convert = content_type and not content_type.startswith("image/jpeg") and not content_type.startswith("image/jpg")
+            
+            if not needs_convert:
+                url_lower = photo_url.lower().split("?")[0]
+                non_jpg = any(url_lower.endswith(e) for e in [".png", ".webp", ".gif", ".avif", ".bmp", ".svg"])
+                if non_jpg:
+                    needs_convert = True
+            
+            if needs_convert:
+                tmp_path = save_path + ".tmp"
+                with open(tmp_path, 'wb') as f:
+                    for chunk in response.iter_content(8192):
+                        f.write(chunk)
+                try:
+                    from PIL import Image
+                    img = Image.open(tmp_path)
+                    if img.mode in ('RGBA', 'LA', 'P'):
+                        bg = Image.new('RGB', img.size, (0, 0, 0))
+                        bg.paste(img, mask=img.convert('RGBA').split()[-1])
+                        img = bg
+                    elif img.mode != 'RGB':
+                        img = img.convert('RGB')
+                    img.save(save_path, 'JPEG', quality=95)
+                    print(f"      🔄 Конвертировано в JPEG: {os.path.basename(save_path)}")
+                except Exception as conv_err:
+                    print(f"      ⚠ Конвертация не удалась ({conv_err}), сохраняем как есть")
+                    import shutil
+                    shutil.move(tmp_path, save_path)
+                finally:
+                    try:
+                        os.remove(tmp_path)
+                    except OSError:
+                        pass
+            else:
+                with open(save_path, 'wb') as f:
+                    for chunk in response.iter_content(8192):
+                        f.write(chunk)
             
             return save_path
         except Exception as e:
@@ -505,6 +681,7 @@ class ImageSearch:
         pixabay_key: str = None,
         bing_key: str = None,
         use_duckduckgo: bool = True,
+        validator=None,
         output_dir: str = None
     ):
         self.output_dir = Path(output_dir or CONFIG["output_dir"])
@@ -524,9 +701,11 @@ class ImageSearch:
         
         # Реальные фото/скриншоты
         if use_duckduckgo:
-            self.services["real"] = DuckDuckGoImageSearch()
+            self.services["real"] = DuckDuckGoImageSearch(validator=validator)
         elif bing_key or CONFIG.get("bing_api_key") or os.environ.get("BING_API_KEY"):
             self.services["real"] = BingImageSearchAPI(bing_key)
+        
+        self.validator = validator
     
     def search(
         self,
@@ -535,7 +714,8 @@ class ImageSearch:
         stock_service: str = "pexels",
         count: int = 5,
         orientation: str = "landscape",
-        save: bool = False
+        save: bool = False,
+        validate: bool = None
     ) -> List[Dict]:
         """
         Поиск изображений
@@ -547,6 +727,7 @@ class ImageSearch:
             count: Количество результатов
             orientation: Ориентация
             save: Сохранять ли изображения
+            validate: Валидировать ли изображения через Qwen VL (True/False/None=авто)
             
         Returns:
             Список результатов
@@ -569,7 +750,7 @@ class ImageSearch:
             else:
                 print(f"🔍 Поиск реальных фото/скриншотов: '{query}'")
                 api = self.services["real"]
-                real_results = api.search(query, count, orientation)
+                real_results = api.search(query, count, orientation, validate=validate)
                 print(f"   ✅ Найдено: {len(real_results)} реальных фото")
                 all_results.extend(real_results)
         
@@ -597,25 +778,25 @@ class ImageSearch:
         
         return all_results
     
-    def search_person(self, name: str, source: str = "real", count: int = 3) -> List[Dict]:
+    def search_person(self, name: str, source: str = "real", count: int = 3, validate: bool = None) -> List[Dict]:
         """Поиск фото персоны (реальные фото приоритетнее)"""
         print(f"👤 Поиск фото персоны: {name}")
-        return self.search(name, source=source, count=count, orientation="portrait")
+        return self.search(name, source=source, count=count, orientation="portrait", validate=validate)
     
-    def search_location(self, name: str, source: str = "stock", count: int = 3) -> List[Dict]:
+    def search_location(self, name: str, source: str = "stock", count: int = 3, validate: bool = None) -> List[Dict]:
         """Поиск фото локации"""
         print(f"📍 Поиск фото локации: {name}")
-        return self.search(name, source=source, count=count, orientation="landscape")
+        return self.search(name, source=source, count=count, orientation="landscape", validate=validate)
     
-    def search_object(self, name: str, source: str = "both", count: int = 3) -> List[Dict]:
+    def search_object(self, name: str, source: str = "both", count: int = 3, validate: bool = None) -> List[Dict]:
         """Поиск фото объекта"""
         print(f"🎯 Поиск фото объекта: {name}")
-        return self.search(name, source=source, count=count, orientation="landscape")
+        return self.search(name, source=source, count=count, orientation="landscape", validate=validate)
     
-    def search_screenshot(self, query: str, count: int = 3) -> List[Dict]:
+    def search_screenshot(self, query: str, count: int = 3, validate: bool = None) -> List[Dict]:
         """Поиск скриншотов (только реальные фото)"""
         print(f"📸 Поиск скриншотов: {query}")
-        return self.search(query, source="real", count=count)
+        return self.search(query, source="real", count=count, validate=validate)
     
     def save_results_json(self, results: List[Dict], filepath: str):
         """Сохраняет результаты поиска в JSON"""

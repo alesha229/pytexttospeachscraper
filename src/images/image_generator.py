@@ -223,6 +223,9 @@ class WhiskAPI:
         images = []
         for panel in response.get("imagePanels", []):
             for img in panel.get("generatedImages", []):
+                returned_ratio = img.get("aspectRatio", "")
+                if returned_ratio and returned_ratio != aspect_ratio:
+                    print(f"   ⚠ API вернул другой аспект: запрошен={aspect_ratio}, получен={returned_ratio}")
                 images.append({
                     "seed": img.get("seed"),
                     "prompt": img.get("prompt"),
@@ -361,10 +364,47 @@ class ImageGenerator:
             
             print(f"💾 Сохранение изображения {i}/{len(images)}...")
             self.api.download_image_from_base64(img["encoded_media"], filepath)
+            
+            if aspect_ratio != "IMAGE_ASPECT_RATIO_LANDSCAPE":
+                filepath = self._crop_to_aspect(filepath, aspect_ratio)
+            
             saved_paths.append(str(filepath))
             print(f"   ✅ {filepath}")
         
         return saved_paths
+
+    def _crop_to_aspect(self, filepath: Path, target_ratio: str) -> Path:
+        """Обрезает изображение до нужного соотношения сторон (центральный кроп)"""
+        from PIL import Image as PILImage
+
+        ratio_map = {
+            "IMAGE_ASPECT_RATIO_SQUARE": 1.0,
+            "IMAGE_ASPECT_RATIO_PORTRAIT": 9 / 16,
+            "IMAGE_ASPECT_RATIO_LANDSCAPE": 16 / 9,
+        }
+        target = ratio_map.get(target_ratio)
+        if not target:
+            return filepath
+
+        img = PILImage.open(filepath)
+        w, h = img.size
+        current = w / h
+
+        if abs(current - target) < 0.01:
+            return filepath
+
+        if current > target:
+            new_w = int(h * target)
+            left = (w - new_w) // 2
+            img = img.crop((left, 0, left + new_w, h))
+        else:
+            new_h = int(w / target)
+            top = (h - new_h) // 2
+            img = img.crop((0, top, w, top + new_h))
+
+        img.save(filepath)
+        print(f"   ✂️ Обрезано до {target_ratio}: {img.size[0]}x{img.size[1]}")
+        return filepath
 
 
 def parse_args():

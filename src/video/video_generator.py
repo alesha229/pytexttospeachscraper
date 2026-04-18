@@ -252,7 +252,7 @@ class VideoGenerator:
             audio_path = os.path.join(audio_dir, f"scene_{scene_num}.wav")
             
             # Используем русский голос
-            voice_id = "Dmitry"
+            voice_id = "Blake"
             
             try:
                 print(f"  🎙️ Озвучка сцены {scene_num}...")
@@ -343,7 +343,7 @@ def main():
     
     parser = argparse.ArgumentParser(description="Генератор видео из текстового описания")
     parser.add_argument("topic", nargs="?", help="Тема видео")
-    parser.add_argument("--language", "-l", default="ru", help="Язык озвучки (ru, en)")
+    parser.add_argument("--language", "-l", default="en", help="Language (en, ru)")
     parser.add_argument("--duration", "-d", type=int, default=30, help="Длительность (сек)")
     parser.add_argument("--style", "-s", help="Стиль видео")
     parser.add_argument("--scenes", "-n", type=int, help="Количество сцен")

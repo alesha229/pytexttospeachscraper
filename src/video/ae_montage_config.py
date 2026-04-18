@@ -89,7 +89,7 @@ class MontageConfig:
 
     def _builtin_default(self) -> dict:
         return {
-            "transitions": {"enabled": True, "type": "cross_dissolve", "duration": 0.8},
+            "transitions": {"enabled": True, "type": "cross_dissolve", "duration": 2.0},
             "quote_template": {
                 "enabled": True,
                 "font": "Arial-BoldMT",

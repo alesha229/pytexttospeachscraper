@@ -79,10 +79,23 @@ class AEJsonGenerator:
         if grain:
             tl.append(grain)
 
+        tc = self.montage_cfg.transitions
+        transitions_enabled = tc.get("enabled") and len(layer_ids) > 1
+        overlay_start_margin = 0.5 if transitions_enabled else 0.0
+        overlay_end_margin = tc.get("duration", 2.0) + 0.5 if transitions_enabled else 0.0
+
         current_time = intro_offset
         for i, block in enumerate(timeline_blocks):
             dur = scene_durs[i]
-            overlays = self._resolve_overlays(block, current_time, dur, assets_dir, is_v3, units_map)
+            ov_at = current_time
+            ov_dur = dur
+            if transitions_enabled:
+                if i > 0:
+                    ov_at += overlay_start_margin
+                    ov_dur -= overlay_start_margin
+                if i < len(timeline_blocks) - 1:
+                    ov_dur -= overlay_end_margin
+            overlays = self._resolve_overlays(block, round(ov_at, 3), round(ov_dur, 3), assets_dir, is_v3, units_map)
             tl.extend(overlays)
             current_time += dur
 
@@ -407,7 +420,7 @@ class AEJsonGenerator:
                     "quote_color": qc.get("quote_color", [0.95, 0.95, 0.85]),
                     "name_color": qc.get("name_color", [0.7, 0.7, 0.8]),
                     "background_opacity": qc.get("background_opacity", 70),
-                    "photo_scale": qc.get("photo_scale", 35),
+                    "photo_scale": qc.get("photo_scale", 75),
                     "photo_x": photo_x,
                     "photo_y": self.HEIGHT // 2,
                     "text_x": text_x,
@@ -438,7 +451,7 @@ class AEJsonGenerator:
                     "duration": round(dur, 3),
                     "file": self._p(photo),
                     "style": {
-                        "scale": rc.get("scale", 35),
+                        "scale": rc.get("scale", 75),
                         "position_x": xy[0],
                         "position_y": xy[1],
                         "fade_duration": rc.get("fade_duration", 0.5),

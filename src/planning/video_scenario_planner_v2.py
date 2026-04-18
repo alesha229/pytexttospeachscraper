@@ -72,7 +72,7 @@ CONFIG = {
     "model": "accounts/fireworks/models/qwen3p6-plus",
     "temperature": 0.7,
     "max_tokens": 4096,
-    "default_language": "ru",
+    "default_language": "en",
 }
 # ============================================================
 
@@ -149,39 +149,39 @@ class VideoScenarioPlannerV2:
     Создает детальный JSON-план для видеомонтажного движка с разделением на фон и оверлеи
     """
     
-    SYSTEM_PROMPT = """Ты — Технический Режиссер и Сценарист автоматизированного YouTube-канала. Твоя задача: превратить входящую тему или текст в детализированный JSON-план для видеомонтажного движка.
+    SYSTEM_PROMPT = """You are a Technical Director and Screenwriter for an automated YouTube channel. Your task: transform an input topic or text into a detailed JSON plan for a video editing engine.
 
-### ТВОЯ ЛОГИКА МЫШЛЕНИЯ:
-1. АНАЛИЗ КОНТЕНТА: Разбей текст на логические блоки. В каждом блоке выдели: основную мысль, ключевых персон, цитаты и эмоциональный окрас.
-2. СЛОИ ВИЗУАЛИЗАЦИИ: Для каждого сегмента определи, что идет фоном (Background), а что — поверх (Overlay).
-3. РЕАЛЬНЫЕ ПЕРСОНЫ: Если упоминается реальный человек, автоматически создавай объект 'person' с его именем для поиска фото в базе/сети.
-4. ЮНИТЫ НА ЭКРАНЕ: Не копируй закадровый текст. Создавай короткие юниты для экрана:
-   - thesis: Короткий тезис (2-5 слов) показывается по центру экрана
-   - quote: Цитата с указанием автора (если есть реальный источник)
-   - news_item: Новость/факт из интернета (требует веб-поиска)
-   - person_photo: Фото персоны (нужен search_query для поиска)
-   - object_photo: Фото объекта/локации (search_query для стока)
+### YOUR THINKING LOGIC:
+1. CONTENT ANALYSIS: Break the text into logical blocks. In each block, identify: the main idea, key persons, quotes, and emotional tone.
+2. VISUALIZATION LAYERS: For each segment, determine what goes as background (Background) and what goes on top (Overlay).
+3. REAL PERSONS: If a real person is mentioned, automatically create a 'person' object with their name for searching their photo online.
+4. ON-SCREEN UNITS: Do not copy the voiceover text. Create short units for the screen:
+   - thesis: A short thesis (2-5 words) displayed in the center of the screen
+   - quote: A quote with the author's name (if there is a real source)
+   - news_item: News/fact from the internet (requires web search)
+   - person_photo: Person's photo (needs search_query for finding)
+   - object_photo: Photo of an object/location (search_query for stock)
 
-### ТРЕБОВАНИЯ К JSON-СТРУКТУРЕ:
-- 'metadata': Общий стиль видео (vibe), темп и список всех нужных ассетов для предварительной загрузки.
-- 'timeline': Массив объектов (блоков), где каждый блок содержит:
-    - 'voiceover': Текст для озвучки.
-    - 'background': Тип (stock_video, generated_image, person_photo) и соответствующий промпт/запрос.
-    - 'overlays': Список ЮНИТОВ для экрана (максимум 1-2 на сцену):
-        * thesis: {"type": "thesis", "content": "КРАТКИЙ ТЕЗИС", "emphasis": "high"}
-        * quote: {"type": "quote", "content": "Цитата", "source": "Автор", "search_query": "запрос для проверки"}
-        * news_item: {"type": "news_item", "headline": "Заголовок", "source": "Сайт", "search_query": "запрос"}
-        * person_photo: {"type": "person_photo", "name": "Имя", "search_query": "запрос для поиска фото"}
-        * object_photo: {"type": "object_photo", "name": "Объект", "search_query": "запрос для стока"}
-- 'assets_manifest': Список КОНКРЕТНЫХ сущностей для генерации/поиска. 
-  ВАЖНО: Не пиши категории. Пиши конкретные объекты с search_query:
+### JSON STRUCTURE REQUIREMENTS:
+- 'metadata': Overall video style (vibe), tempo, and list of all needed assets for preloading.
+- 'timeline': An array of objects (blocks), where each block contains:
+    - 'voiceover': Text for voiceover narration.
+    - 'background': Type (stock_video, generated_image, person_photo) and corresponding prompt/query.
+    - 'overlays': List of ON-SCREEN UNITS (maximum 1-2 per scene):
+        * thesis: {"type": "thesis", "content": "SHORT THESIS", "emphasis": "high"}
+        * quote: {"type": "quote", "content": "Quote text", "source": "Author", "search_query": "query for verification"}
+        * news_item: {"type": "news_item", "headline": "Headline", "source": "Website", "search_query": "query"}
+        * person_photo: {"type": "person_photo", "name": "Name", "search_query": "query for finding photo"}
+        * object_photo: {"type": "object_photo", "name": "Object", "search_query": "query for stock photo"}
+- 'assets_manifest': List of SPECIFIC entities for generation/search. 
+  IMPORTANT: Do not write categories. Write specific objects with search_query:
   [{"type": "person", "name": "Victor Surge", "search_query": "Victor Surge Eric Knudsen photo"}, {"type": "location", "name": "Forest", "search_query": "dark foggy forest night"}].
 
-### СТИЛИСТИКА ТЕКСТА:
-Используй живой, современный язык. Избегай канцеляризмов. Текст должен звучать как естественная речь блогера.
+### TEXT STYLE:
+Use vivid, modern language. Avoid bureaucratic phrasing. Text should sound like natural speech from a narrator.
 
-### ФОРМАТ ВЫВОДА:
-Выдавай ТОЛЬКО чистый JSON. Без вводных слов и пояснений."""
+### OUTPUT FORMAT:
+Output ONLY pure JSON. No introductory words or explanations."""
     
     def __init__(
         self,
@@ -246,27 +246,27 @@ class VideoScenarioPlannerV2:
         # Рассчитываем примерное количество слов (средняя скорость речи ~2.5 слова/сек)
         estimated_words = int(target_duration * 2.5)
         
-        user_prompt = f"""Создай сценарий для видео.
+        user_prompt = f"""Create a video script.
 
-ТЕМА: {topic}
-ЯЗЫК озвучки: {lang}
-ЦЕЛЕВАЯ длительность: {target_duration} секунд (примерно {estimated_words} слов)"""
+TOPIC: {topic}
+VOICEOVER LANGUAGE: {lang}
+TARGET duration: {target_duration} seconds (approximately {estimated_words} words)"""
         
         if style:
-            user_prompt += f"\nСТИЛЬ: {style}"
+            user_prompt += f"\nSTYLE: {style}"
         
         if num_scenes:
-            user_prompt += f"\nКОЛИЧЕСТВО сцен: {num_scenes}"
+            user_prompt += f"\nNUMBER OF scenes: {num_scenes}"
         
         user_prompt += f"""
 
-### ВАЖНО:
-- Общий объем текста озвучки должен быть примерно {estimated_words} слов.
-- Каждая сцена должна содержать достаточно текста для полноценного раскрытия темы.
-- Не делай сцены слишком короткими - текст должен быть информативным и полным.
-- Распределяй текст равномерно по всем сценам.
+### IMPORTANT:
+- The total voiceover text volume should be approximately {estimated_words} words.
+- Each scene must contain enough text to fully develop the topic.
+- Do not make scenes too short - text should be informative and complete.
+- Distribute text evenly across all scenes.
 
-Верни ТОЛЬКО JSON без markdown, без пояснений, только валидный JSON."""
+Return ONLY JSON without markdown, without explanations, only valid JSON."""
         
         messages = [
             {"role": "system", "content": self.SYSTEM_PROMPT},
@@ -707,7 +707,7 @@ class VideoScenarioPlannerV2:
                 continue
             print(f"   🎙️ Блок {i+1}: {voiceover[:50]}...")
             audio_path = os.path.join(audio_dir, f"block_{i+1}.wav")
-            voice_id = "Dmitry"
+            voice_id = "Blake"
             try:
                 print(f"  🎙️ Озвучка блока {i+1}...")
                 success = tts(text=voiceover, voice_id=voice_id, output_path=audio_path, max_chunk=1000)
@@ -834,7 +834,7 @@ def create_scenario_cli():
     parser = argparse.ArgumentParser(description="Генератор видео-сценариев V2 через Fireworks AI")
     parser.add_argument("topic", nargs="?", help="Тема видео")
     parser.add_argument("--api-key", help="Fireworks API key")
-    parser.add_argument("--language", "-l", default="ru", help="Язык озвучки (ru, en)")
+    parser.add_argument("--language", "-l", default="en", help="Language (en, ru)")
     parser.add_argument("--duration", "-d", type=int, default=30, help="Целевая длительность (сек)")
     parser.add_argument("--style", "-s", help="Стиль видео")
     parser.add_argument("--scenes", "-n", type=int, help="Количество сцен")

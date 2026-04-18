@@ -49,3 +49,5 @@ temp/
 node_modules/
 video_output/
 video_output_v2/
+.env
+.env

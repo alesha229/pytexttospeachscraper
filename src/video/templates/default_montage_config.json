@@ -2,7 +2,7 @@
   "transitions": {
     "enabled": true,
     "type": "cross_dissolve",
-    "duration": 0.8
+    "duration": 2.0
   },
   "quote_template": {
     "enabled": true,

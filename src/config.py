@@ -20,7 +20,12 @@ INWORLD_UID = os.environ.get("INWORLD_UID", "")
 LLM_MODEL = "accounts/fireworks/models/qwen3p6-plus"
 LLM_TEMPERATURE = 0.7
 LLM_MAX_TOKENS = 4096
-DEFAULT_LANGUAGE = "ru"
+DEFAULT_LANGUAGE = "en"
+
+# Image Validator (Qwen VL)
+VISION_MODEL = "accounts/fireworks/models/qwen3p6-plus"
+VALIDATOR_CONFIDENCE_THRESHOLD = 0.6
+VALIDATOR_MAX_ATTEMPTS = 5
 
 # Image Generation
 IMAGE_MODEL = "IMAGEN_3_5"

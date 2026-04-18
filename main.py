@@ -46,14 +46,14 @@ Examples:
     gen_parser.add_argument("topic", type=str, help="Video topic/theme")
     gen_parser.add_argument("--duration", type=int, default=30, help="Target duration in seconds")
     gen_parser.add_argument("--style", type=str, default="documentary", help="Video style")
-    gen_parser.add_argument("--language", type=str, default="ru", help="Language (ru, en)")
+    gen_parser.add_argument("--language", type=str, default="en", help="Language (en, ru)")
     
     # Generate scenario command
     scen_parser = subparsers.add_parser("scenario", help="Generate video scenario")
     scen_parser.add_argument("topic", type=str, help="Video topic/theme")
     scen_parser.add_argument("--duration", type=int, default=30, help="Target duration")
     scen_parser.add_argument("--style", type=str, default="documentary", help="Video style")
-    scen_parser.add_argument("--language", type=str, default="ru", help="Language")
+    scen_parser.add_argument("--language", type=str, default="en", help="Language")
     
     # Generate images command
     img_parser = subparsers.add_parser("images", help="Generate images")
@@ -80,6 +80,7 @@ Examples:
             fireworks_api_key=os.environ.get("FIREWORKS_API_KEY"),
             whisk_cookie=os.environ.get("WHISK_COOKIE"),
             pexels_api_key=os.environ.get("PEXELS_API_KEY"),
+            validate_images=True,
         )
         generator.generate_video(
             topic=args.topic,

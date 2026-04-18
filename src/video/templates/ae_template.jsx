@@ -18,6 +18,8 @@
 
     var layers = {};
     var bgOrder = [];
+    var TRANSITION_COMP_DUR = 2.0;
+    var transitionMaster = null;
 
     for (var i = 0; i < data.timeline.length; i++) {
         var e = data.timeline[i];
@@ -112,16 +114,36 @@
         layer.outPoint = e.at + e.duration;
     }
 
+    function fitToCompCover(footage, factor) {
+        var sx = W / footage.width * 100;
+        var sy = H / footage.height * 100;
+        var s = Math.max(sx, sy) * factor;
+        return [s, s];
+    }
+
+    function fitToCompContain(footage, factor) {
+        var sx = W / footage.width * 100;
+        var sy = H / footage.height * 100;
+        var s = Math.min(sx, sy) * factor;
+        return [s, s];
+    }
+
+    function fitToComp120(footage) {
+        return fitToCompCover(footage, 1.2);
+    }
+
     function buildVideo(e) {
         var footage = tryImport(e.file);
         if (!footage) {
             var layer = mainComp.layers.addSolid([0.15, 0.15, 0.25], e.label || e.id, W, H, 1.0, e.duration);
             layer.startTime = e.at;
             layer.outPoint = e.at + e.duration;
+            layer.property("Scale").setValue([120, 120]);
             if (e.id) { layers[e.id] = layer; bgOrder.push(e.id); }
             return;
         }
         var layer = addLayer(mainComp, footage, e.at, e.duration, e.label || e.id);
+        layer.property("Scale").setValue(fitToComp120(footage));
         if (e.id) { layers[e.id] = layer; bgOrder.push(e.id); }
     }
 
@@ -129,6 +151,7 @@
         var layer = mainComp.layers.addSolid(e.color, e.label || e.id, W, H, 1.0, e.duration);
         layer.startTime = e.at;
         layer.outPoint = e.at + e.duration;
+        layer.property("Scale").setValue([120, 120]);
         if (e.id) { layers[e.id] = layer; bgOrder.push(e.id); }
     }
 
@@ -212,7 +235,7 @@
                     var pLayer = qc.layers.add(photo);
                     pLayer.name = "Person Photo";
                     pLayer.property("Position").setValue([st.photo_x, st.photo_y]);
-                    pLayer.property("Scale").setValue([st.photo_scale, st.photo_scale]);
+                    pLayer.property("Scale").setValue(fitToCompContain(photo, 0.5));
                 }
             }
 
@@ -273,8 +296,21 @@
         }
         var layer = addLayer(mainComp, footage, e.at, e.duration, "Photo");
         layer.property("Position").setValue([st.position_x, st.position_y]);
-        layer.property("Scale").setValue([st.scale, st.scale]);
+        layer.property("Scale").setValue(fitToCompContain(footage, 0.5));
         fade(layer, e.at, e.at + st.fade_duration, e.at + e.duration - st.fade_duration, e.at + e.duration);
+    }
+
+    function findTransitionComp() {
+        if (transitionMaster) return transitionMaster;
+        for (var i = 1; i <= project.numItems; i++) {
+            var item = project.item(i);
+            if (item instanceof CompItem && item.name === "Transition") {
+                transitionMaster = item;
+                return transitionMaster;
+            }
+        }
+        $.writeln("Warning: Transition comp not found in project");
+        return null;
     }
 
     function buildTransition(e) {
@@ -287,6 +323,15 @@
         var ct_start = at - dur;
         var ct_end = at + dur;
         var half = dur / 2;
+
+        var tc = findTransitionComp();
+        if (tc) {
+            var tLayer = mainComp.layers.add(tc);
+            tLayer.name = "Transition " + e.from + "->" + e.to;
+            tLayer.startTime = at - TRANSITION_COMP_DUR - 0.75;
+            tLayer.outPoint = at - 0.75;
+            tLayer.collapseTransformation = true;
+        }
 
         switch (e.style) {
             case "cross_dissolve":

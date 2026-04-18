@@ -312,7 +312,7 @@ def main():
     parser = argparse.ArgumentParser(description="Генератор сценариев V3 (unit-based)")
     parser.add_argument("topic", nargs="?", help="Тема видео")
     parser.add_argument("--api-key", help="Fireworks API key")
-    parser.add_argument("--language", "-l", default="ru", help="Язык")
+    parser.add_argument("--language", "-l", default="en", help="Language (en, ru)")
     parser.add_argument("--duration", "-d", type=int, default=60, help="Длительность (сек)")
     parser.add_argument("--style", "-s", help="Стиль")
     parser.add_argument("--scenes", "-n", type=int, help="Количество сцен")
