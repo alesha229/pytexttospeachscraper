@@ -1,6 +1,6 @@
 python-dotenv
 requests
 openai
-moviepy
 Pillow
 pydub
+duckduckgo-search

@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(pip install *)",
-      "WebFetch(github.com)"
-    ]
-  },
-  "$version": 3
-}
