@@ -6,7 +6,7 @@ import shutil
 from typing import Dict, List, Optional
 from pathlib import Path
 
-from ..config import TEMPLATES_DIR, AE_OUTPUT_DIR
+from ..config import TEMPLATES_DIR, AE_OUTPUT_DIR, AE_TEMPLATE
 
 
 LOGO_POSITIONS = {
@@ -136,12 +136,15 @@ class AEJsonGenerator:
 
         scene_durs = [self._get_duration(b, audio_dir, i, is_v3) for i, b in enumerate(timeline_blocks)]
 
+        is_news = AE_TEMPLATE == "news"
+
         intro_offset = 0.0
         ic = self.montage_cfg.intro
         if ic.get("enabled"):
             intro_offset = ic.get("duration", 5)
 
-        total_duration = intro_offset + sum(scene_durs)
+        FINAL_EDIT_DURATION = 12 if is_news else 0
+        total_duration = FINAL_EDIT_DURATION + intro_offset + sum(scene_durs)
 
         topic = scenario.get("metadata", {}).get("vibe", "project")
         project_name = "".join(c if c.isalnum() or c in " -_" else "_" for c in topic[:50]).strip()
@@ -154,13 +157,41 @@ class AEJsonGenerator:
             for unit in scenario.get("units_manifest", []):
                 units_map[unit.get("id", "")] = unit
 
+        assets_name_to_file = {}
+        for asset in scenario.get("assets_manifest", []):
+            asset_name = asset.get("name", "")
+            asset_type = asset.get("type", "")
+            if asset_name and asset_type:
+                safe_name = asset_name.replace(" ", "_").lower()
+                possible_prefixes = [f"{asset_type}_", "real_", "stock_"]
+                found = False
+                for prefix in possible_prefixes:
+                    if found:
+                        break
+                    for f in os.listdir(assets_dir):
+                        if f.startswith(prefix):
+                            filename_no_ext = f.rsplit(".", 1)[0].lower()
+                            name_tokens = set(safe_name.split("_"))
+                            file_tokens = set(filename_no_ext.split("_"))
+                            if name_tokens.issubset(file_tokens):
+                                assets_name_to_file[f"{asset_type}:{asset_name}".lower()] = f
+                                found = True
+                                break
+
         tl = []
         layer_ids = []
 
-        if ic.get("enabled"):
-            tl.append(self._entry_intro(scenario, intro_offset))
+        if is_news:
+            tl.append({
+                "type": "final_edit",
+                "at": 0,
+                "duration": FINAL_EDIT_DURATION,
+            })
 
-        current_time = intro_offset
+        if ic.get("enabled"):
+            tl.append(self._entry_intro(scenario, FINAL_EDIT_DURATION + intro_offset))
+
+        current_time = FINAL_EDIT_DURATION + intro_offset
         for i, block in enumerate(timeline_blocks):
             dur = scene_durs[i]
             lid = f"bg_{i}"
@@ -174,16 +205,17 @@ class AEJsonGenerator:
                 tl.append(kb)
             current_time += dur
 
-        grain = self._entry_film_grain(total_duration)
-        if grain:
-            tl.append(grain)
+        if not is_news:
+            grain = self._entry_film_grain(total_duration)
+            if grain:
+                tl.append(grain)
 
         tc = self.montage_cfg.transitions
         transitions_enabled = tc.get("enabled") and len(layer_ids) > 1
         overlay_start_margin = 0.5 if transitions_enabled else 0.0
         overlay_end_margin = tc.get("duration", 2.0) + 0.5 if transitions_enabled else 0.0
 
-        current_time = intro_offset
+        current_time = FINAL_EDIT_DURATION + intro_offset
         for i, block in enumerate(timeline_blocks):
             dur = scene_durs[i]
             ov_at = current_time
@@ -194,18 +226,19 @@ class AEJsonGenerator:
                     ov_dur -= overlay_start_margin
                 if i < len(timeline_blocks) - 1:
                     ov_dur -= overlay_end_margin
-            overlays = self._resolve_overlays(block, round(ov_at, 3), round(ov_dur, 3), assets_dir, is_v3, units_map)
+            overlays = self._resolve_overlays(block, round(ov_at, 3), round(ov_dur, 3), assets_dir, is_v3, units_map, assets_name_to_file)
             tl.extend(overlays)
             current_time += dur
 
         if tc.get("enabled") and len(layer_ids) > 1:
-            ct = intro_offset
+            ct = FINAL_EDIT_DURATION + intro_offset
+            trans_dur = tc.get("duration", 2.0)
             for i in range(len(scene_durs) - 1):
                 ct += scene_durs[i]
                 tl.append({
                     "type": "transition", "from": layer_ids[i], "to": layer_ids[i + 1],
-                    "style": tc.get("type", "cross_dissolve"), "at": round(ct, 3),
-                    "duration": tc.get("duration", 0.8),
+                    "style": tc.get("type", "cross_dissolve"), "at": round(ct - trans_dur / 2, 3),
+                    "duration": trans_dur,
                 })
 
         music = self._entry_music(total_duration)
@@ -256,11 +289,25 @@ class AEJsonGenerator:
         return json_path
 
     def _copy_template(self, project_dir: str):
-        template_src = TEMPLATES_DIR / "ae_template.jsx"
-        if template_src.exists():
+        templates = {
+            "news": "ae_template.jsx",
+            "scp": "ae_template_scp.jsx",
+        }
+        for name, filename in templates.items():
+            src = TEMPLATES_DIR / filename
+            if src.exists():
+                dst_name = f"ae_template_{name}.jsx" if name != "news" else "ae_template.jsx"
+                dst = os.path.join(project_dir, dst_name)
+                shutil.copy2(str(src), dst)
+                print(f"JSX ({name}): {dst}")
+            else:
+                print(f"Warning: template not found: {src}")
+
+        active_src = TEMPLATES_DIR / templates.get(AE_TEMPLATE, "ae_template.jsx")
+        if active_src.exists():
             dst = os.path.join(project_dir, "ae_template.jsx")
-            shutil.copy2(str(template_src), dst)
-            print(f"JSX: {dst}")
+            shutil.copy2(str(active_src), dst)
+            print(f"JSX (active={AE_TEMPLATE}): {dst}")
 
     def _print_summary(self, name, scenes, duration, json_path, intro_offset):
         print(f"\nAE JSON: {name}")
@@ -273,6 +320,7 @@ class AEJsonGenerator:
                       ("Intro", cfg.intro), ("Grain", cfg.film_grain),
                       ("Music", cfg.background_music), ("Logo", cfg.logo)]:
             print(f"  {'+' if m.get('enabled') else '-'} {n}")
+        print(f"  Template: {AE_TEMPLATE}")
         print(f"Output: {json_path}")
 
     @staticmethod
@@ -380,8 +428,11 @@ class AEJsonGenerator:
         }
 
     def _resolve_overlays(self, block: dict, at: float, dur: float,
-                           assets_dir: str, is_v3: bool, units_map: dict) -> list:
+                           assets_dir: str, is_v3: bool, units_map: dict,
+                           assets_name_to_file: dict = None) -> list:
         overlays = list(block.get("overlays", []))
+        if assets_name_to_file is None:
+            assets_name_to_file = {}
         if is_v3:
             for unit_ref in block.get("units", []):
                 ref_id = unit_ref.get("ref", "")
@@ -395,11 +446,17 @@ class AEJsonGenerator:
                     overlays.append({"type": "quote", "content": unit.get("content", ""),
                                      "source": unit.get("source", ""), "position": "center"})
                 elif ut == "person":
+                    asset_key = f"person:{unit.get('name', '')}".lower()
+                    full_filename = assets_name_to_file.get(asset_key, "")
                     overlays.append({"type": "person_photo", "name": unit.get("name", ""),
-                                     "search_query": unit.get("search_query", "")})
+                                     "search_query": unit.get("search_query", ""),
+                                     "filename": full_filename})
                 elif ut == "object":
+                    asset_key = f"object:{unit.get('name', '')}".lower()
+                    full_filename = assets_name_to_file.get(asset_key, "")
                     overlays.append({"type": "object_photo", "name": unit.get("name", ""),
-                                     "search_query": unit.get("search_query", "")})
+                                     "search_query": unit.get("search_query", ""),
+                                     "filename": full_filename})
 
         UNIQUE_TYPES = {"quote", "photo_overlay", "thesis"}
         PRIORITY = {"quote": 0, "photo_overlay": 1, "thesis": 2}
@@ -455,6 +512,12 @@ class AEJsonGenerator:
             photo_path = self._find_person_photo(assets_dir, ov_idx, source, search_query)
             if photo_path:
                 photo_path = self._fix_extension(photo_path)
+            is_news = AE_TEMPLATE == "news"
+            if is_news:
+                return [{"type": "quote_template", "at": round(at, 3),
+                         "duration": round(dur, 3), "text": o_text, "source": source,
+                         "photo_file": self._p(photo_path) if photo_path else None,
+                         "frame_number": 3}]
             photo_pos = qc.get("photo_position", "left")
             text_x = int(self.WIDTH * 0.6)
             photo_x = int(self.WIDTH * 0.22)
@@ -479,7 +542,13 @@ class AEJsonGenerator:
         if o_type in ("person_photo", "object_photo") and self.montage_cfg.real_photo_overlay.get("enabled"):
             name = overlay.get("name", o_text)
             search_query = overlay.get("search_query", "")
-            photo = self._find_real_photo(assets_dir, ov_idx, name, search_query)
+            full_filename = overlay.get("filename", "")
+            if full_filename:
+                photo = os.path.join(assets_dir, full_filename) if not os.path.isabs(full_filename) else full_filename
+            elif o_type == "person_photo":
+                photo = self._find_person_photo(assets_dir, ov_idx, name, search_query)
+            else:
+                photo = self._find_real_photo(assets_dir, ov_idx, name, search_query)
             if photo:
                 photo = self._fix_extension(photo)
             if photo:
@@ -660,18 +729,17 @@ class AEJsonGenerator:
                             search_query: str = "") -> Optional[str]:
         if not assets_dir or not os.path.exists(assets_dir):
             return None
-        candidates = []
+        
         if person_name:
-            safe = person_name.replace(" ", "_")
-            candidates.extend([f"real_{safe}.jpg", f"real_{safe}.png",
-                               f"person_{safe}.jpg", f"person_{safe}.png",
-                               f"person_{safe}_placeholder.png"])
+            safe_name = person_name.replace(" ", "_")
+            for f in os.listdir(assets_dir):
+                if f.startswith("person_") and safe_name.lower() in f.lower():
+                    return os.path.join(assets_dir, f)
+        
         if search_query:
             safe_q = re.sub(r'[^a-zA-Z0-9_\s]', '', search_query).replace(' ', '_')
-            if safe_q and safe_q != (person_name.replace(" ", "_") if person_name else ""):
-                candidates.extend([f"real_{safe_q}.jpg", f"real_{safe_q}.png"])
-        candidates.extend([f"bg_real_person_{idx + 1}.jpg", f"bg_real_person_{idx + 1}.png"])
-        found = self._find_file(assets_dir, candidates)
-        if found:
-            return found
+            for f in os.listdir(assets_dir):
+                if f.startswith("person_") and safe_q.lower() in f.lower():
+                    return os.path.join(assets_dir, f)
+        
         return self._fuzzy_find_asset(assets_dir, person_name, search_query)

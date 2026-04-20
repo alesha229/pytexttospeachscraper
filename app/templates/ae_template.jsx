@@ -25,14 +25,15 @@
         var e = data.timeline[i];
         try {
             switch (e.type) {
+                case "final_edit":   buildFinalEdit(e); break;
                 case "intro":        buildIntro(e); break;
                 case "video":        buildVideo(e); break;
                 case "solid":        buildSolid(e); break;
                 case "audio":        buildAudio(e); break;
                 case "ken_burns":    buildKenBurns(e); break;
-                case "film_grain":   buildFilmGrain(e); break;
                 case "text_overlay": buildTextOverlay(e); break;
                 case "photo_overlay":buildPhotoOverlay(e); break;
+                case "quote_template": buildQuoteTemplate(e); break;
                 case "transition":   buildTransition(e); break;
                 case "music":        buildMusic(e); break;
                 case "logo":         buildLogo(e); break;
@@ -144,6 +145,10 @@
         }
         var layer = addLayer(mainComp, footage, e.at, e.duration, e.label || e.id);
         layer.property("Scale").setValue(fitToComp120(footage));
+        layer.property("Position").setValue([W / 2, H / 2]);
+        var anchorX = footage.width / 2;
+        var anchorY = footage.height / 2;
+        layer.property("Anchor Point").setValue([anchorX, anchorY]);
         if (e.id) { layers[e.id] = layer; bgOrder.push(e.id); }
     }
 
@@ -173,131 +178,27 @@
         pos.setValueAtTime(e.at + e.duration, [W / 2 + e.pan_x, H / 2 + e.pan_y]);
     }
 
-    function buildFilmGrain(e) {
-        var footage = tryImport(e.file);
-        if (!footage) return;
-        var comp = project.items.addComp("Grain Loop", W, H, 1.0, e.duration, FPS);
-        var inner = comp.layers.add(footage);
-        inner.timeRemapEnabled = true;
-        var tr = inner.property("Time Remap");
-        var fd = footage.duration;
-        tr.setValueAtTime(0, 0);
-        tr.setValueAtTime(fd - 0.01, fd - 0.01);
-        tr.expression = "loopOut('cycle')";
-        inner.outPoint = e.duration;
-
-        var layer = mainComp.layers.add(comp);
-        layer.name = "Film Grain";
-        layer.startTime = e.at;
-        layer.outPoint = e.at + e.duration;
-        if (e.blend_mode === "screen") layer.blendingMode = BlendingMode.SCREEN;
-        else if (e.blend_mode === "multiply") layer.blendingMode = BlendingMode.MULTIPLY;
-        else if (e.blend_mode === "soft_light") layer.blendingMode = BlendingMode.SOFT_LIGHT;
-        else layer.blendingMode = BlendingMode.OVERLAY;
-        layer.property("Opacity").setValue(e.opacity);
-        layer.property("Scale").setValue([e.scale, e.scale]);
-    }
-
-    function buildTextOverlay(e) {
-        var st = e.style;
-        if (e.template === "thesis" && st.background_enabled) {
-            var txt = mainComp.layers.addText(e.text);
-            txt.name = "Thesis";
-            txt.startTime = e.at;
-            txt.outPoint = e.at + e.duration;
-            setStyle(txt, st.font, st.font_size, st.justification, st.fill_color);
-            txt.property("Position").setValue([W / 2, st.y_pos]);
-            fade(txt, e.at, e.at + st.fade_in, e.at + e.duration - st.fade_out, e.at + e.duration);
-
-            var txtRect = txt.sourceRectAtTime(e.at, false);
-            var padding = 40;
-            var bgW = (txtRect.width + padding * 2) / W * 100;
-            var bgH = (txtRect.height + padding * 2) / H * 100;
-            var bgCx = W / 2 + txtRect.left + txtRect.width / 2;
-            var bgCy = st.y_pos + txtRect.top + txtRect.height / 2;
-            var bgBox = mainComp.layers.addSolid(st.background_color, "Thesis BG", W, H, 1.0);
-            bgBox.startTime = e.at;
-            bgBox.outPoint = e.at + e.duration;
-            bgBox.property("Opacity").setValue(st.background_opacity);
-            bgBox.property("Scale").setValue([bgW, bgH]);
-            bgBox.property("Position").setValue([bgCx, bgCy]);
-            bgBox.moveAfter(txt);
-            fade(bgBox, e.at, e.at + st.fade_in, e.at + e.duration - st.fade_out, e.at + e.duration);
-
-        } else if (e.template === "quote") {
-            var qc = project.items.addComp("Quote", W, H, 1.0, e.duration, FPS);
-            var dimBg = qc.layers.addSolid([0.05, 0.05, 0.08], "Dim BG", W, H, 1.0);
-            dimBg.property("Opacity").setValue(st.background_opacity);
-
-            if (e.photo_file) {
-                var photo = tryImport(e.photo_file);
-                if (photo) {
-                    var pLayer = qc.layers.add(photo);
-                    pLayer.name = "Person Photo";
-                    pLayer.property("Position").setValue([st.photo_x, st.photo_y]);
-                    pLayer.property("Scale").setValue(fitToCompContain(photo, 0.5));
-                }
-            }
-
-            var hasPhoto = e.photo_file && photo;
-            var boxW = hasPhoto ? W * 0.35 : W * 0.7;
-            var boxH = H * 0.5;
-            var qText = qc.layers.addBoxText([boxW, boxH], "\u201C" + e.text + "\u201D");
-            qText.name = "Quote Text";
-            setStyle(qText, st.font, st.font_size_quote, "LEFT_JUSTIFY", st.quote_color);
-            qText.property("Position").setValue([st.text_x, st.text_y]);
-            fade(qText, 0, 0.5, e.duration - 0.5, e.duration);
-
-            if (e.source) {
-                var nText = qc.layers.addBoxText([boxW, 60], "\u2014 " + e.source);
-                nText.name = "Person Name";
-                setStyle(nText, st.font, st.font_size_name, "LEFT_JUSTIFY", st.name_color);
-                nText.property("Position").setValue([st.text_x, st.name_y]);
-            }
-
-            var compLayer = mainComp.layers.add(qc);
-            compLayer.name = "Quote";
-            compLayer.startTime = e.at;
-            compLayer.outPoint = e.at + e.duration;
-
-        } else {
-            var txt2 = mainComp.layers.addText(e.text);
-            txt2.name = e.template || "Text";
-            txt2.startTime = e.at;
-            txt2.outPoint = e.at + e.duration;
-            setStyle(txt2, st.font, st.font_size, st.justification, st.fill_color);
-            txt2.property("Position").setValue([W / 2, st.y_pos]);
-        }
-    }
-
-    function buildPhotoOverlay(e) {
-        var st = e.style;
-        if (st.shadow) {
-            var shadow = mainComp.layers.addSolid([0, 0, 0], "Shadow", W, H, 1.0);
-            shadow.startTime = e.at + st.fade_duration;
-            shadow.outPoint = e.at + e.duration - st.fade_duration;
-            shadow.property("Opacity").setValue(40);
-            shadow.property("Scale").setValue([200, 200]);
-            shadow.property("Position").setValue([st.position_x + 5, st.position_y + 5]);
-            try {
-                var blur = shadow.property("Effects").addProperty("ADBE Gaussian Blur 2");
-                blur.property("Blurriness").setValue(20);
-            } catch(e2) {}
-        }
-
-        var footage = tryImport(e.file);
-        if (!footage) {
-            var fallback = mainComp.layers.addText("Photo");
-            fallback.name = "Photo (missing)";
-            fallback.startTime = e.at;
-            fallback.outPoint = e.at + e.duration;
-            fallback.property("Position").setValue([st.position_x, st.position_y]);
+    function buildFinalEdit(e) {
+        var finalComp = findCompByName("Final Edit");
+        if (!finalComp) {
+            $.writeln("Warning: Final Edit not found, skipping");
             return;
         }
-        var layer = addLayer(mainComp, footage, e.at, e.duration, "Photo");
-        layer.property("Position").setValue([st.position_x, st.position_y]);
-        layer.property("Scale").setValue(fitToCompContain(footage, 0.5));
-        fade(layer, e.at, e.at + st.fade_duration, e.at + e.duration - st.fade_duration, e.at + e.duration);
+
+        var finalLayer = mainComp.layers.add(finalComp);
+        finalLayer.name = "Final Edit";
+        finalLayer.startTime = e.at;
+        finalLayer.outPoint = e.at + e.duration;
+    }
+
+    function findCompByName(name) {
+        for (var i = 1; i <= project.numItems; i++) {
+            var item = project.item(i);
+            if (item instanceof CompItem && item.name === name) {
+                return item;
+            }
+        }
+        return null;
     }
 
     function findTransitionComp() {
@@ -314,120 +215,17 @@
     }
 
     function buildTransition(e) {
-        var a = layers[e.from];
-        var b = layers[e.to];
-        if (!a || !b) return;
-
-        var dur = e.duration;
-        var at = e.at;
-        var ct_start = at - dur;
-        var ct_end = at + dur;
-        var half = dur / 2;
-
-        var tc = findTransitionComp();
-        if (tc) {
-            var tLayer = mainComp.layers.add(tc);
-            tLayer.name = "Transition " + e.from + "->" + e.to;
-            tLayer.startTime = at - TRANSITION_COMP_DUR - 0.75;
-            tLayer.outPoint = at - 0.75;
-            tLayer.collapseTransformation = true;
+        var transComp = findCompByName("Transition");
+        if (!transComp) {
+            $.writeln("Error: Transition comp not found");
+            return;
         }
 
-        switch (e.style) {
-            case "cross_dissolve":
-                a.property("Opacity").setValueAtTime(at - 0.01, 100);
-                a.property("Opacity").setValueAtTime(ct_end, 0);
-                a.outPoint = ct_end;
-                b.property("Opacity").setValueAtTime(ct_start, 0);
-                b.property("Opacity").setValueAtTime(at + 0.01, 100);
-                b.startTime = ct_start;
-                break;
-
-            case "fade_black":
-                a.property("Opacity").setValueAtTime(at - half - 0.01, 100);
-                a.property("Opacity").setValueAtTime(at, 0);
-                a.outPoint = at + 0.01;
-                b.property("Opacity").setValueAtTime(at, 0);
-                b.property("Opacity").setValueAtTime(at + half, 100);
-                break;
-
-            case "slide_left":
-                slideTransition(a, b, at, ct_start, ct_end, -1);
-                break;
-            case "slide_right":
-                slideTransition(a, b, at, ct_start, ct_end, 1);
-                break;
-
-            case "zoom_in":
-                zoomTransition(a, b, at, half, 1);
-                break;
-            case "zoom_out":
-                zoomTransition(a, b, at, half, -1);
-                break;
-
-            case "zoom_dissolve":
-                a.property("Scale").setValueAtTime(at - half, [100, 100]);
-                a.property("Scale").setValueAtTime(at, [130, 130]);
-                a.property("Opacity").setValueAtTime(at - half, 100);
-                a.property("Opacity").setValueAtTime(at, 0);
-                a.outPoint = at + 0.01;
-                b.property("Scale").setValueAtTime(at, [120, 120]);
-                b.property("Scale").setValueAtTime(at + half, [100, 100]);
-                b.property("Opacity").setValueAtTime(at - 0.01, 0);
-                b.property("Opacity").setValueAtTime(at + 0.02, 100);
-                break;
-
-            case "dolly_push":
-                dollyTransition(a, b, at, half, 1);
-                break;
-            case "dolly_pull":
-                dollyTransition(a, b, at, half, -1);
-                break;
-
-            case "glitch":
-                glitchTransition(a, b, at, dur);
-                break;
-
-            case "whip_pan":
-                a.property("Position").setValueAtTime(at - half, [W / 2, H / 2]);
-                a.property("Position").setValueAtTime(at - 0.02, [W / 2 + W * 0.3, H / 2]);
-                a.property("Scale").setValueAtTime(at - half, [100, 100]);
-                a.property("Scale").setValueAtTime(at - 0.02, [110, 110]);
-                a.property("Opacity").setValueAtTime(at - 0.04, 100);
-                a.property("Opacity").setValueAtTime(at - 0.01, 0);
-                a.outPoint = at + 0.01;
-                b.property("Position").setValueAtTime(at + 0.02, [W / 2 - W * 0.3, H / 2]);
-                b.property("Position").setValueAtTime(at + half, [W / 2, H / 2]);
-                b.property("Scale").setValueAtTime(at + 0.02, [110, 110]);
-                b.property("Scale").setValueAtTime(at + half, [100, 100]);
-                b.property("Opacity").setValueAtTime(at - 0.01, 0);
-                b.property("Opacity").setValueAtTime(at + 0.04, 100);
-                break;
-
-            case "rotate_zoom":
-                a.property("Scale").setValueAtTime(at - half, [100, 100]);
-                a.property("Scale").setValueAtTime(at, [140, 140]);
-                a.property("Rotation").setValueAtTime(at - half, 0);
-                a.property("Rotation").setValueAtTime(at, 8);
-                a.property("Opacity").setValueAtTime(at - 0.03, 100);
-                a.property("Opacity").setValueAtTime(at, 0);
-                a.outPoint = at + 0.01;
-                b.property("Scale").setValueAtTime(at, [140, 140]);
-                b.property("Scale").setValueAtTime(at + half, [100, 100]);
-                b.property("Rotation").setValueAtTime(at, -8);
-                b.property("Rotation").setValueAtTime(at + half, 0);
-                b.property("Opacity").setValueAtTime(at - 0.01, 0);
-                b.property("Opacity").setValueAtTime(at + 0.03, 100);
-                break;
-
-            default:
-                a.property("Opacity").setValueAtTime(at - 0.01, 100);
-                a.property("Opacity").setValueAtTime(ct_end, 0);
-                a.outPoint = ct_end;
-                b.property("Opacity").setValueAtTime(ct_start, 0);
-                b.property("Opacity").setValueAtTime(at + 0.01, 100);
-                b.startTime = ct_start;
-        }
+        var transLayer = mainComp.layers.add(transComp);
+        transLayer.name = "Transition " + e.from + "->" + e.to;
+        transLayer.startTime = e.at;
+        transLayer.outPoint = e.at + e.duration;
+        transLayer.collapseTransformation = true;
     }
 
     function buildMusic(e) {
@@ -459,77 +257,6 @@
         layer.property("Position").setValue([e.position_x, e.position_y]);
         layer.property("Scale").setValue([e.scale, e.scale]);
         layer.property("Opacity").setValue(e.opacity);
-    }
-
-
-    // ====================== TRANSITION HELPERS ======================
-
-    function slideTransition(a, b, at, ct_start, ct_end, dir) {
-        a.property("Position").setValueAtTime(at - 0.01, [W / 2, H / 2]);
-        a.property("Position").setValueAtTime(ct_end, [W / 2 - W * dir, H / 2]);
-        a.outPoint = ct_end;
-        b.property("Position").setValueAtTime(ct_start, [W / 2 + W * dir, H / 2]);
-        b.property("Position").setValueAtTime(at + 0.01, [W / 2, H / 2]);
-        b.startTime = ct_start;
-    }
-
-    function zoomTransition(a, b, at, half, dir) {
-        var zs = dir === 1 ? 150 : 80;
-        var ns = dir === 1 ? 80 : 150;
-        a.property("Scale").setValueAtTime(at - half - 0.01, [100, 100]);
-        a.property("Scale").setValueAtTime(at, [zs, zs]);
-        a.property("Opacity").setValueAtTime(at - 0.02, 100);
-        a.property("Opacity").setValueAtTime(at, 0);
-        a.outPoint = at + 0.01;
-        b.property("Scale").setValueAtTime(at, [ns, ns]);
-        b.property("Scale").setValueAtTime(at + half, [100, 100]);
-        b.property("Opacity").setValueAtTime(at - 0.01, 0);
-        b.property("Opacity").setValueAtTime(at + 0.02, 100);
-    }
-
-    function dollyTransition(a, b, at, half, dir) {
-        var push = dir;
-        a.property("Scale").setValueAtTime(at - half, [100, 100]);
-        a.property("Scale").setValueAtTime(at, [100 + 40 * push, 100 + 40 * push]);
-        a.property("Opacity").setValueAtTime(at - 0.03, 100);
-        a.property("Opacity").setValueAtTime(at, 0);
-        a.outPoint = at + 0.01;
-        try {
-            var ba = a.property("Effects").addProperty("ADBE Gaussian Blur 2");
-            ba.property("Blurriness").setValueAtTime(at - half, 0);
-            ba.property("Blurriness").setValueAtTime(at, 30 * Math.abs(push));
-        } catch(e2) {}
-        b.property("Scale").setValueAtTime(at, [100 + 40 * push, 100 + 40 * push]);
-        b.property("Scale").setValueAtTime(at + half, [100, 100]);
-        b.property("Opacity").setValueAtTime(at - 0.01, 0);
-        b.property("Opacity").setValueAtTime(at + 0.03, 100);
-        try {
-            var bb = b.property("Effects").addProperty("ADBE Gaussian Blur 2");
-            bb.property("Blurriness").setValueAtTime(at, 30 * Math.abs(push));
-            bb.property("Blurriness").setValueAtTime(at + half, 0);
-        } catch(e3) {}
-    }
-
-    function glitchTransition(a, b, at, dur) {
-        var step = dur / 5;
-        a.property("Opacity").setValueAtTime(at - dur, 100);
-        a.property("Opacity").setValueAtTime(at - 3 * step, 100);
-        a.property("Opacity").setValueAtTime(at - 3 * step + 0.03, 30);
-        a.property("Opacity").setValueAtTime(at - 3 * step + 0.06, 80);
-        a.property("Opacity").setValueAtTime(at - 2 * step, 0);
-        a.outPoint = at - 2 * step + 0.01;
-        a.property("Position").setValueAtTime(at - 4 * step, [W / 2, H / 2]);
-        a.property("Position").setValueAtTime(at - 3 * step, [W / 2 + 30, H / 2 - 15]);
-        a.property("Position").setValueAtTime(at - 3 * step + 0.04, [W / 2 - 20, H / 2 + 10]);
-        a.property("Position").setValueAtTime(at - 2 * step, [W / 2, H / 2]);
-        b.property("Opacity").setValueAtTime(at - 2 * step, 0);
-        b.property("Opacity").setValueAtTime(at - 2 * step + 0.03, 70);
-        b.property("Opacity").setValueAtTime(at - 2 * step + 0.06, 20);
-        b.property("Opacity").setValueAtTime(at - step, 90);
-        b.property("Opacity").setValueAtTime(at - step + 0.04, 100);
-        b.property("Position").setValueAtTime(at - 2 * step, [W / 2 - 40, H / 2 + 20]);
-        b.property("Position").setValueAtTime(at - step, [W / 2 + 15, H / 2 - 10]);
-        b.property("Position").setValueAtTime(at, [W / 2, H / 2]);
     }
 
 

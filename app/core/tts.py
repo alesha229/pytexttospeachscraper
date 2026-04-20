@@ -22,9 +22,21 @@ if sys.platform == "win32":
 
 URL = "https://inworld.ai/api/create-speech"
 
-COOKIES = {
-    "inworld_uid": INWORLD_UID,
-}
+COOKIES = {}
+
+def _init_cookies():
+    global COOKIES
+    from ..config import INWORLD_UID, TTS_COOKIE
+    if INWORLD_UID:
+        COOKIES["inworld_uid"] = INWORLD_UID
+    if TTS_COOKIE:
+        for cookie_part in TTS_COOKIE.split(";"):
+            cookie_part = cookie_part.strip()
+            if "=" in cookie_part:
+                key, value = cookie_part.split("=", 1)
+                COOKIES[key.strip()] = value.strip()
+
+_init_cookies()
 
 HEADERS = {
     "Accept": "*/*",
@@ -217,7 +229,7 @@ def _fetch_audio_chunk(text: str, voice_id: str) -> Optional[bytes]:
 
     raw_audio_data = bytearray()
 
-    response = requests.post(URL, headers=HEADERS, cookies=COOKIES, json=payload, stream=True, timeout=60)
+    response = requests.post(URL, headers=HEADERS, cookies=COOKIES, json=payload, stream=True, timeout=120)
 
     if response.status_code != 200:
         raise Exception(f"Server error: {response.status_code}")

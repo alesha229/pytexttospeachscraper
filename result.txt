@@ -1,0 +1,404 @@
+ITEM : SCP-001
+OBJECT CLASS: THAUMIEL
+
+SPECIAL CONTAINMENT PROCEDURES:
+There are no containment procedures for the O5 Council. The O5 Council IS containment. They are the thirteen overseers who stand at the apex of the Foundation's command structure, holding Level 5 clearance — the highest security clearance granted to living personnel. Their identities are classified. Their locations are classified. Their very existence is debated. Some within the Foundation insist they are human. Others whisper that they stopped being human long ago. Their decisions shape the containment of every anomaly in Foundation custody. Their orders are absolute. And their secrets run deeper than any SCP file dare record.
+
+DESCRIPTION:
+The O5 Council — also designated Overseer Level 5, or simply "The Thirteen" — refers to the governing body that oversees all Foundation operations worldwide. Numbered O5-1 through O5-13, the Council operates from unknown locations, communicating through secure channels that even the Department of Information Security cannot trace. Their authority supersedes all departments, all site directors, all Mobile Task Force commanders. They answer to no one.
+
+What makes the O5 Council anomalous is not any single paranormal trait. It is the accumulation of questions that surround them. Questions that no one dares ask aloud.
+
+How have the same thirteen individuals apparently held their positions for decades? Some records suggest certain O5 numbers have remained consistent since the Foundation's inception. Photographs recovered from compromised archives show faces that have not aged across time periods spanning forty years or more.
+
+What procedures were required to grant them their clearance? The Foundation employs Artificially Intelligent Conscripts — AICs — developed by the Antimemetics Division and the AI Division to manage secure data. Yet even these systems, designed to process and protect information that human minds cannot safely hold, are denied certain files marked with the O5 seal. What knowledge requires containment beyond the capacity of machines built to contain the uncontainable?
+
+Where does their authority truly originate? The Foundation's departments — the Armored Weapons Department with its eigenweapons and para-technology born from the fires of the Seventh Occult War, the Department of Miscommunications wrestling with anomalies that twist language and thought, RCT-Delta-t operating outside normal command structure with its transtemporal Delta-level clearance — all of these answer to the Council. Even the Temporal Anomalies Department, which has not yet been founded but somehow already exists, sending operatives from past and future and alternate timelines, even they must submit their credentials for O5 review.
+
+The Council sits above it all. And they are not comfortable with being questioned.
+
+DISCOVERY HISTORY:
+The earliest references to an overseer council predate the modern Foundation. During the Seventh Occult War, the wartime think-tank that would become the Armored Weapons Department reported to a shadow committee whose members were never named in surviving documents. Correspondence from the period refers only to "The Thirteen" or "Those Who Watch." One memo, recovered from a sealed vault beneath Site-169, contains a handwritten note in the margin: "They were not thirteen before the war began. Count the chairs. Count them again."
+
+The implication has haunted researchers ever since. Were the original members replaced? Added? Or did something happen during the Occult War that changed the nature of the Council itself?
+
+The Department of Unreality — that quiet, seldom-discussed branch handling phenomena that should not exist and in many ways do not — has filed repeated requests to investigate O5 operational records. Every request has been denied. Every investigator assigned to the case has been reassigned. Two were found to have no memory of their assignment upon questioning. One was found to have never existed at all, according to Foundation employment records, despite possessing a valid identification badge, a signed employment contract, and colleagues who remembered working alongside her for seven years.
+
+INCIDENT LOG — O5-8 COMMUNICATION BREACH:
+
+On March 14th, 2019, a secure transmission was intercepted by the Department of Information Security. The transmission originated from an untraceable source and was directed to all Foundation sites simultaneously. The message read:
+
+"They are not making decisions. They are receiving instructions. We are not the ones containing the anomalies. We are the anomaly being contained. I have seen the chair at the head of the table. It is not for any of us. It has never been empty."
+
+The transmission was authenticated as originating from O5-8's personal secure terminal. Within six minutes, all records of the transmission were purged from Foundation servers. Personnel who had read the message were administered Class-B amnestics. The Department of Information Security issued a formal report stating the transmission resulted from a compromised channel and contained no actionable intelligence.
+
+O5-8 has not been heard from since. When personnel at Site-01 inquired about O5-8's status, they received a single response: "O5-8 is present and active. There is no cause for concern." The message was signed by all twelve remaining Council members.
+
+TEST RESULTS — PROJECT PANDORA:
+
+In 2017, the Department of Miscommunications developed a metaphysical analysis engine designed to decode communication patterns in anomalies that manipulate language itself. The engine was approved for limited testing on classified O5 communications as part of an internal audit requested by the Ethics Committee — one of the few bodies with any nominal authority to review Council activities.
+
+The engine processed three months of O5 internal correspondence. The results were deeply unsettling.
+
+The communications were not discussions. They were not deliberations. According to the analysis, every O5 Council communication followed the pattern of a ritual — specific phrases repeated in specific sequences, linguistic structures that predated any known human language, and temporal markers that suggested the conversations were not occurring in linear time. The engine's final output before it was shut down by order of the Council read:
+
+"Translation incomplete. Source language identified. No living human language. Pattern matches no known memetic or antimemetic construct. Pattern matches no known anomalous communication protocol. Closest match: [NULL] — Referenced in Document 001-O5-OMEGA. Access denied. Access denied. Access denied. They are not speaking to each other. They are speaking to something else. Something that is listening through them."
+
+The research team was disbanded. The engine was dismantled. The Department of Miscommunications was instructed to focus on its primary mandate and to consider O5 communications outside its jurisdiction. The order was signed by O5-1.
+
+ADDENDUM 001-A — NOTE FROM DR. EVERETT MANN, DEPARTMENT OF UNREality:
+
+I have spent my career studying things that do not exist. Phenomena that contradict the fundamental nature of reality. I have learned that the most dangerous anomalies are not the ones that break the rules of our world. They are the ones that reveal the rules were never what we thought they were.
+
+The O5 Council is not what protects us from the darkness. The O5 Council is what stands between us and the realization that the darkness has always been in charge.
+
+I do not know what the Council is. I do not know if its members are human, or if they ever were. I do not know what sits in the chair that O5-8 described — the chair that has never been empty.
+
+But I know this. The Foundation contains anomalies. The Council contains the Foundation. And something contains the Council.
+
+We are not at the top of this chain. We were never at the top.
+
+We are in a box. And the box is inside another box. And that box is inside something that has no name, no classification, and no containment procedures.
+
+Because you cannot contain what is already containing you.
+
+[DOCUMENT ENDS — FURTHER INQUIRY DENIED BY ORDER OF O5 COUNCIL]
+
+---SOURCES---
+
+Source 1: Departments
+URL: https://scp-wiki.wikidot.com/departments
+
+Title: Foundation Departments - SCP Foundation
+All Foundation personnel contribute to our overall mission to Secure, Contain, and Protect, but achieving these objectives requires a wide variety of different approaches, each appropriate to a different kind of anomaly. This has necessitated the creation of numerous departments specializing in specific tasks, disciplines or fields, as well as administrative bodies responsible for overseeing them all.
+Some of the more notable Departments are listed below, although it should be noted that these are not the only Departments is responsible for keeping the Foundation database secure and intact specializes in the humanization of the containment process and to establish a mutual bond between personnel and anomalies. The AEED aims to create a safe environment where both parties are treated as equals, frequently conducting a number of recreational activities and the like to further strengthen the relationship between them.
+Site-169 is tasked with the design, testing, and production of para- and eigenweapons for use across the Foundation. From equipping Mobile Task Forces to supporting site security and decommissioning efforts, AWD exists to provide solutions when force is necessary.
+Originally formed from a wartime think-tank during the 7th Occult War, AWD has a long and turbulent history. Periods of rapid innovation often came at the cost of safety, oversight, and ethical compliance. Once regarded as indispensable, AWD has in recent years suffered serious blows to its reputation. Now operating under new leadership, AWD seeks to rebuild that trust while proving the Foundation still has a use for it.
+Antimemetics Division of the Foundation's IT Department was created to develop, study, and utilise Artificial Intelligence. This includes containing or neutralising anomalous artificial intelligences, as well as creating Foundation-Aligned Artificially Intelligent Conscripts (.aic) to run Foundation Facilities and be deployed on field missions in digital space.
+To see all documents tagged with _aiad_, specialises in identifying and responding to threats, coordinating emergency responses to events affecting multiple Foundation sites specialises in anomalies that manipulate language or communication in ways that make them difficult to accurately describe and contain. Existing at the convergence of memetics, antimemetics, linguistics, and metaphysics, the Department has the unenviable task of writing Special Containment Procedures for some of the Foundation's most perplexing anomalies.
+To see all documents tagged with _miscommunications_, utilisation or destruction of anomalous items handles the Foundation's worldwide analysis and processing of information gathered from telephone calls. This includes the routine surveillance of calls made to emergency services in Facilities like Site-14, an transtemporal agency that exists outside of the normal Foundation command structure, with a unique “Δ” level clearance. At present the Temporal Anomalies Department has not yet been founded, and so RCT-Δt operatives from the past, future, or alternate timelines may have difficulty getting their credentials recognised by other Departments.
+To see all documents tagged with _delta-t_, Department of Unreality ![Image 27: department-logo **Overview:** [Department Name] handles a very specific subset of anomalous phenomena affecting [Relevant Information concerning the Department]
+[Link to further information * * *
+This page is the responsibility of the Collaboration Pages subteam of the Curation Team If you have questions or want to add a new Department to the list, you can make a new post on the **Departments discussion page documenting that the group meets the requirements listed below. You can let staff know about this post in the #help-desk channel on the SCP Wiki Official Discord server or via IRC chat #site17 or by directly messaging a member of the Collaboration Pages subteam.
+* Internal Departments - A list of Foundation Departments translated from the Russian Branch of the SCP Foundation.
+* A Semi Comprehensive List of Foundation Departments - Listing more minor departments omitted from this list.
+
+Source 2: Object Classes
+URL: https://scp-wiki.wikidot.com/object-classes
+
+Title: Object Classes - SCP Foundation
+All anomalous objects, entities, and phenomena requiring Special Containment Procedures are assigned an Object Class. An Object Class is a part of the standard SCP template. While there have been proposals to create a more coherent system, rigidly defined classes would hinder an author's ability to write the way they want to.
+If you find an SCP article that you feel might be inappropriately classified, feel free to raise discussion on the topic and see what other community members think. If the explanation is not to your satisfaction, then feel free to express your opinion on the matter and vote accordingly on the page.
+In cases where an SCP's object class changes over time, and the SCP article reflects that, for the purpose of tagging only the Object Class or classes on the final version of the SCP should be applied. The exception is SCPs that were Neutralized, Decomissioned or Explained - they should be tagged with whatever their object class was before.
+, explained in detail in this guide which adds a Risk Class to indicate how dangerous an anomaly's effect are to individuals, and a Disruption Class to indicate how widespread its effects would be if uncontained. Alternatively, some articles use color-coded Threat Levels to indicate how dangerous an anomaly if containment was breached. This system was originally created by the French branch of the SCP Wiki, as outlined in this translated guide but has seen some use on the English-language Wiki. Other systems are less frequently used, and may be the creation of a single author for use in their own works, although other people are welcome to use if if they think it works well for their own articles.
+**I thought we weren't Decomissioning articles anymore? When did that change?**
+Originally, the Decommissioned Object Class was used by staff to place unwanted articles deemed to be of low quality in a sort of "Wall of Shame" rather than simply deleting them, keeping them around to serve as examples of what not to do. This involved rewriting the article to describe the SCP object's "decomissioning", generally involving author avatars destroying the object in an over-the-top manner. This practice is no longer performed, partly because such heavy-handed edits by SCP staff are no longer allowed and partly because decommissioning ended up backfiring, rather than encouraging better writing. The Decommissioned articles, formerly listed here have now been deleted. See the History of the Universe Hub for more information about this period in the site's history.
+The modern Decomissioned Object Class, as described on the Decommissioning Department Hub is very different. Although the name references the original process of Decommissioning, it's about exploring the reasons why the SCP Foundation might want to destroy a particular SCP object for pragmatic or ethical reasons, and is not about mocking low-quality articles.
+**What determines which Object Classes are added to this list?**
+Ultimately, it comes down to how often an object class is used. While the majority of SCPs are classified as Safe, Euclid or Keter, some articles use a different classification. While most of these are created for a specific SCP and used only once, a narrative object class can be reused if another author thinks it is useful. As a general guideline, if you use an object class that isn't listed on this page, it's worth making sure that it's clear what it means within the SCP article, because your reader is unlikely to have seen it before.
+Safe, Euclid, and Keter have been standard classes since the inception of the website; all others became standard due to widespread usage. Currently, an esoteric object class must be used in 25 SCP articles before it can be given its own tag and be defined in this guide.
+**If you have any other questions about Object Classes, feel free to ask in the discussion.**
+
+Source 3: Scp 001
+URL: https://scp-wiki.wikidot.com/scp-001
+
+Title: SCP-001 - SCP Foundation
+The SCP Wiki's default theme failed to load. If you see this error and are experiencing graphical issues, you may be able to resolve it by refreshing the page. If you are on iOS, you may also need to clear your cache
+If the page you are on "looks fine," it is most likely (but not certainly) because its theme is overriding the SCP Wiki's default Sigma-10 theme. If you were to then navigate to a Sigma-10 page, such as the Front Pageor
+CODE NAME: Jonathan Ball - A Good Boy
+CODE NAME: weizhong|thedeadlymoose|Drewbear|Dexanote
+CODE NAME: ROUNDERHOUSE's Bone Proposal
+EditRate (+416)TagsDiscuss (218)+Options
+Edit SectionsAppendEdit MetaWatchersBacklinksPage SourceParentLock PageRenameDelete
+Help| Flag as objectionable| Update cookie settings
+Powered by Wikidot.com. Watch headings for an "edit" link when available.
+Append content without editing the whole page source.
+Check out how this page has evolved in the past.
+If you want to discuss contents of this page - this is the easiest way to do it.
+View and manage file attachments for this page.
+A few useful tools to manage this Site.
+See pages that link to and include this page.
+Change the name (also URL address, possibly the category) of the page.
+View wiki source for this page without editing.
+View/set parent page (used for creating breadcrumbs and structured layout).
+Notify administrators if there is objectionable content in this page.
+Something does not work as expected? Find out what you can do.
+General Wikidot.com documentation and help section.
+Wikidot.com Terms of Service - what you can, what you should not etc.
+!Image 13 14]( 15]( 16]( 17]( 18]( 19]( 20]( 21]( 22]( 23]( 24](
+
+Source 4: Scp 076
+URL: https://scp-wiki.wikidot.com/scp-076
+
+Title: SCP-076 - SCP Foundation
+**TO:** Director Maria Jones, Recordkeeping and Information Security Administration
+**SUBJECT:** Revision of SCP-076 SCP File
+I have to go on record as saying that I seriously object to the proposed revisions of the SCP-076 Special Containment Procedures File. I know that Redact All Important Stuff Already claims it's a security risk, but you and I both know it's just top brass trying to sweep their biggest and most embarrassing mistake ever under the damn rug. Omega-Seven happened. It existed. Those people died because you screwed up, and you can't change that, no matter how hard you try to hide it.
+For God's sake, man, those people guarding him deserve to know exactly what he is and what he did. What WE did. How we fucked up, so they'll know better.
+**Special Containment Procedures:** Containment Area 25b is to be located 200 m below sea level, tunneled out of solid bedrock in a seismologically stable area. Sole access to the containment facility is to be through a vertical elevator shaft separated every fifty (50) meters with a reinforced blast door, constructed of 20 cm thick material shielding. Elevator shaft shall be flooded with seawater when not in use.
+Containment Area 25b is to be constructed with the following components:
+* An Outer Security Perimeter against outside threats, staffed by security personnel trained in close quarters battle and counter-intrusion tactics.
+* An Administrative and Support Area (ASA) consisting of support facilities and living quarters for on-site personnel.
+* A Primary Containment Zone (PCZ), consisting of a 7 m cube encased in 1.5 m of reinforced material. PCZ is to be designed to be flooded and drained as needed, and should remain filled with seawater unless access to contents is required.
+* A 150 m "killing corridor" which is to be the sole access to the PCZ from the ASA (including water, power, drainage, and ventilation lines). The walls and floor of the corridor are to be reinforced in a similar manner to the PCZ, with the addition of an electric deterrence system capable of delivering a 20,000 volt shock.
+A security station located at the entrance to the killing corridor is to be staffed with no fewer than three (3) armed security personnel on watch at any one point in time. Armament is to include, but not be limited to, at least one (1) ███████ CIW system on a pintle mount with a clear line of sight down the corridor, with a plexiglass screen to protect the operator from thrown weapons.
+In the event of a full breach, all on-site staff are to proceed immediately to the closest security station for weapons and armor distribution. Staff will remain at Alert Condition One until SCP-076-2 is confirmed neutralized. Should 90 minutes pass after declaration of full breach without a Stand Down order being given by Level 4 or higher personnel, Final Contingency Measures will be activated, flooding the entire facility in seawater and sealing off the access shaft for a minimum of 24 hours before retrieval is attempted. This will, by necessity, result in the deaths of all on-site staff.
+**Description:** SCP-076 consists of two components: a stone cube (SCP-076-1) and a humanoid entity contained within (SCP-076-2).
+SCP-076-1 is a 3 m cube made of black speckled metamorphic stone. All surfaces outside and within SCP-076-1 are covered in deeply engraved patterns corresponding to no known civilizations. Radioisotope analysis indicates that the object is approximately ten thousand (10,000) years old. A door is located on one side, sealed with a lock 0.5 m in width, surrounded by twenty (20) er locks in a circular pattern. As of yet, none of the keys have been found, making the door impossible to lock once closed.
+Interior temperature is approximately 93 Kelvin, and cannot be altered by any means, internal or external. Directly in the center of the room is a 2.13 m tall stone coffin, held in place and sealed shut by several chains of unknown make and substance, which are attached to the inner corners of SCP-076-1.
+SCP-076-2 resembles a lean Semitic human male in his late twenties. Hair is black, and eyes are gray, skin tone olive. Subject is 1.96 m in height and 81.65 kg in weight. Numerous tattoos depicting arcane and occult iconography are present all over the body (mostly in the form of leering demonic faces) and ranges from subtle to openly ostentatious. Subject, when encased inside SCP-076-1, is technically dead.
+However, occasionally SCP-076-2 will awaken, effectively "reanimating", complete with all vital processes needed to sustain a living human being. Subject will then attempt to leave SCP-076-1. If successful, subject will enter a trance state and seek out the nearest human being, ignoring all other living things in the process. Upon coming into contact with living humans, SCP-076-2 will enter a rage state in which it attempts to engage and kill all human beings encountered. To date, only the subject's death has been shown to be effective in ending these rampages.
+Terminating SCP-076-2 is often problematic due to its significant physical abilities. Subject has superhuman strength and speed, and although not invulnerable, has shown a remarkable ability to ignore pain and shock, pressing on despite what would be debilitating wounds in normal humans. Prior encounters have shown that SCP-076-2 has the ability to (among other things):
+* Rip through a reinforced steel security door over the course of four (4) minutes of sustained assault.
+* Clear over 64 m of distance in under three (3) seconds.
+* Take multiple .50 caliber BMG rounds to the head and survive for several minutes to continue killing, despite severe damage to the cerebellum.
+* Swat handgun and assault-rifle caliber bullets out of the air with a length of steel rebar.
+* Survive for over one (1) hour deprived of oxygen before finally asphyxiating.
+* SCP-076-2's most unusual ability, however, is its ability to apparently materialize bladed weapons out of nowhere. Slow-motion video footage reveals that the blades in question are actually pulled from a miniature dimensional rift described as a " hole in space." Where this portal leads is unknown, as is how SCP-076-2 is capable of generating said rifts. Footage of the blades in question shows them to be made out of a completely non-reflective black material appearing as a "black void in space." As the blades rapidly vanish after leaving the subject's possession, no structural analysis is possible at this time.
+SCP-076-2 has effectively been killed several times in various manners:
+* Sustained fire from multiple heavy-caliber machine guns.
+* Crushed beneath a 13.6 metric tonne piece of elevator equipment for use on SCP-076-1.
+* Cremation through the use of a Thermate-TH3 grenade placed directly inside SCP-076-2's open chest cavity.
+* During the worst breach to date, Containment Area-25 (which previously housed SCP-076) was forced to detonate its on site warhead as a last attempt to contain SCP-076-2 while it was attempting escape, resulting in total destruction of the site and all on-site personnel. SCP-076-1 survived.
+Upon death, SCP-076-2's remains will putrefy rapidly, until reduced to dust. SCP-076-1 and the coffin within will then slam shut with great force, and the lock will rotate, sealing it shut. SCP-076-2 will then reform within the coffin, a process taking anywhere from six (6) hours to twenty-five (25) years.
+What posthumous analysis of SCP-076-2 exists shows that it has a internal system highly different from our own, documented in [DATA EXPUNGED].
+**Additional:** SCP-076 was found in ████████████, Mongolia, in 18██, by archaeologists from England. All members of the exp subsequently killed on the return voyage home. SCP-076 was recovered from the ship █████ ███████ by the ███████ Society (one of the organizations that later merged into the modern Global Occult Coalition) and placed on display in their Inner Sanctum.
+SCP-076 remained in storage for ███████ (██) years
+
+Source 5: Scp 682
+URL: https://scp-wiki.wikidot.com/scp-682
+
+Title: SCP-682 - SCP Foundation
+!Image 1: monster8editub9-new.jpg kilometers clear of human development.
+**Description:** SCP-682 is a , vaguely reptile-like creature of unknown origin. It appears to be extremely intelligent, and was observed to engage in complex communication with SCP-079.
+SCP-682 has always been observed to have extremely high strength, speed, and reflexes, though exact levels vary with its form. SCP-682's physical body grows and changes very quickly, growing or decreasing in size as it consumes or sheds material. SCP-682 gains energy from anything it ingests, organic or inorganic. Digestion seems to be aided by a set of filtering gills inside of SCP-682's nostrils, which are able to remove usable matter from any liquid solution, enabling it to constantly regenerate from the acid it is contained in. SCP-682's regenerative capabilities and resilience are staggering, and SCP-682 has been seen moving and speaking with its body 87% destroyed or rotted.
+In case of containment breach, SCP-682 is to be tracked and re-captured by all available Mobile Task Forces, and no teams with fewer than seven (7) members are cleared to engage it. To date (██-██-████), attempted breaches have numbered at seventeen (17), while successful breaches have numbered at six (6). (See Addendum 682-D).
+**Addendum 682-B:** Portion of recorded transcript of ██████
+**Dr. ██████:** If you don't talk now, we will remove you from this attempt and place you back into-
+**SCP-682:** (Incomprehensible)
+**Dr. ██████:** Pardon? (Motions to move microphone closer)
+**SCP-682:** (Incomprehensible)
+**Dr. ██████:** Speak up. (To Personnel D-085) Move the mic up closer.
+**SCP-682:** …they were (Incomprehensible)…
+**Dr. ██████:** (To Personnel D-085) That microphone has only so much gain, move it closer to it!
+**Personnel D-085:** His throat's messed up man, look at it! He ain't talking- (Gasps and screams)
+**SCP-682:** (Appearing to assault D-085's body) …they were… disgusting…
+**Dr. ██████:** (Retreats from the room)
+**Addendum 682-D:** Breaches with SCP-682:
+**1: First Occurrence,** ██-██-████: Handled by Agent ███████, Agent ███, Agent ████████ (KIA), Personnel D-129 (KIA), Personnel D-027 (KIA), Personnel D-173 (KIA), Personnel D-200 (KIA), Personnel D-193 (KIA)
+**2: Second Occurrence,** ██-██-████: Handled by Agent ███, Agent ████████████, Dr. ███████, Personnel D-124, Personnel D-137 (KIA), Personnel D-201 (KIA), Personnel D-202 (KIA), Personnel D-203 (KIA)
+**3: Third Occurrence,** ██-██-████: Handled by Agent ███████, MSgt █████████, Agent ████████, Agent ██████ (KIA), Personnel D-018 (KIA), Personnel D-211 (KIA), Personnel D-216
+**4: Fourth Occurrence,** ██-██-████: Handled by Agent ████████, SSgt ██████, TSgt █████, Pvt ████████, Pvt █████, Lt. ████████████, SSgt ████████ (KIA), Col ████████ (KIA), Pvt ███████ (KIA), Pvt ██████ (KIA), Agent ███ (KIA)
+**5: Fifth Occurrence,** ██-██-████: Handled by Personnel D-221, Agent ██████████ (KIA), Agent ████████ (KIA), Agent ██████ (KIA), Personnel D-028 (KIA), Personnel D-111 (KIA), Personnel D-281 (KIA), Personnel D-209 (KIA)
+**6: Sixth Occurrence,** ██-██-████: Handled by Agent ██████████, Agent ██████, Personnel D-291 (MIA), Agent ████████ (KIA), Agent █████████████ (KIA), Personnel D-299 (KIA), Personnel D-277 (KIA), Personnel D-278 (KIA), Personnel D-279 (KIA)
+**Addendum 682-E:** Termination Options:
+**Log of event 682-E18:** Dr. █████ attempts to use SCP-409, Dr. ███████ and Dr. █████ have requested permission to attempt the termination of SCP-682 using SCP-689 The request is currently pending approval from the ████████.
+It has also been suggested by Dr. Gears to use SCP-182 in an attempt to communicate with SCP-682. SCP-182 has expressed reluctance, and refuses to enter the containment center of SCP-682, if at all possible.
+**Addendum 682-F:** Termination Log:
+Experiment-Log-T-98816-oc108-682
+
+Source 6: Scp 173
+URL: https://scp-wiki.wikidot.com/scp-173
+
+Title: SCP-173 - SCP Foundation
+The SCP Wiki's default theme failed to load. If you see this error and are experiencing graphical issues, you may be able to resolve it by refreshing the page. If you are on iOS, you may also need to clear your cache
+If the page you are on "looks fine," it is most likely (but not certainly) because its theme is overriding the SCP Wiki's default Sigma-10 theme. If you were to then navigate to a Sigma-10 page, such as the Front Pageor
+**Special Containment Procedures:** Item SCP-173 is to be kept in a locked container at all times. When personnel must enter SCP-173's container, no fewer than 3 may enter at any time and the door is to be relocked behind them. At all times, two persons must maintain direct eye contact with SCP-173 until all personnel have vacated and relocked the container.
+**Description:** Moved to Site-19 1993. Origin is as of yet unknown. It is constructed from concrete and rebar with traces of Krylon brand spray paint. SCP-173 is animate and extremely hostile. The object cannot move while within a direct line of sight. Line of sight must not be broken at any time with SCP-173. Personnel assigned to enter container are instructed to alert one another before blinking. Object is reported to attack by snapping the neck at the base of the skull, or by strangulation. In the event of an attack, personnel are to observe Class 4 hazardous object containment procedures.
+Personnel report sounds of scraping stone originating from within the container when no one is present inside. This is considered normal, and any change in this behaviour should be reported to the acting HMCL supervisor on duty.
+The reddish brown substance on the floor is a combination of feces and blood. Origin of these materials is unknown. The enclosure must be cleaned on a bi-weekly basis.
+EditRate (+10632)TagsDiscuss (2026)+Options
+Edit SectionsAppendEdit MetaWatchersBacklinksPage SourceParentLock PageRenameDelete
+Help| Flag as objectionable| Update cookie settings
+Powered by Wikidot.com. Watch headings for an "edit" link when available.
+Append content without editing the whole page source.
+Check out how this page has evolved in the past.
+If you want to discuss contents of this page - this is the easiest way to do it.
+View and manage file attachments for this page.
+A few useful tools to manage this Site.
+See pages that link to and include this page.
+Change the name (also URL address, possibly the category) of the page.
+View wiki source for this page without editing.
+View/set parent page (used for creating breadcrumbs and structured layout).
+Notify administrators if there is objectionable content in this page.
+Something does not work as expected? Find out what you can do.
+General Wikidot.com documentation and help section.
+Wikidot.com Terms of Service - what you can, what you should not etc.
+!Image 10 11 12]( 13]( 14]( 15]( 16]( 17]( 18]( 19]( 20]( 21](
+
+Source 7: Scp 096
+URL: https://scp-wiki.wikidot.com/scp-096
+
+Title: SCP-096 - SCP Foundation
+**Special Containment Procedures:** SCP-096 is to be contained in its cell, a 5 m x 5 m x 5 m airtight steel cube, at all times. Weekly checks for any cracks or holes are mandatory. There are to be absolutely no video surveillance or optical tools of any kind inside SCP-096's cell. Security personnel will use pre-installed pressure sensors and laser detectors to ensure SCP-096's presence inside the cell.
+Any and all photos, video, or recordings of SCP-096's likeness are strictly forbidden without approval from Dr. ███ and O5-█.
+**Description:** SCP-096 is a humanoid creature measuring approximately 2.38 meters in height. Subject shows very little muscle mass, with preliminary analysis of body mass suggesting mild malnutrition. Arms are grossly out of proportion with the rest of the subject's body, with an approximate length of 1.5 meters each. Skin is mostly devoid of pigmentation, with no sign of any body hair.
+SCP-096's jaw can open to four (4) times the norm of an average human. Other facial features remain similar to an average human, with the exception of the eyes, which are also devoid of pigmentation. It is not yet known whether SCP-096 is blind or not. It shows no signs of any higher brain functions, and is not considered to be sapient.
+SCP-096 is normally extremely docile, with pressure sensors inside its cell indicating it spends most of the day pacing by the eastern wall. However, when someone views SCP-096's face, whether it be directly, via video recording, or even a photograph, it will enter a stage of considerable emotional distress. SCP-096 will cover its face with its hands and begin screaming, crying, and babbling incoherently. Approximately one (1) to two (2) minutes after the first viewing, SCP-096 will begin running to the person who viewed its face (who will from this point on be referred to as SCP-096-1).
+Documented speeds have varied from thirty-five (35) km/h to ███ km/h, and seems to depend on distance from SCP-096-1. At this point, no known material or method can impede SCP-096's progress. The actual position of SCP-096-1 does not seem to affect SCP-096's response; it seems to have an innate sense of SCP-096-1's location. Note: This reaction does not occur when viewing artistic depictions (see Document 096-1. Order is awaiting approval. Termination order has been approved, and is to be carried out by Dr. ███ on [DATA REDACTED]. See Incident-096-1-A █████████, former commander of retrieval team Zulu 9-A**
+**Retrieval Incident #096-1-A**
+[████████ ████████ Time, Research Area ██]
+**Capt. █████████:** It always sucks ass to get Initial Retrieval duty. You have no idea what the damn thing is capable of besides what jacked up information the field techies can scrape up, and you're lucky if they even tell you the whole story. They told us to "bag and tag." Didn't tell us jackshit about not looking at the damn thing.
+**Dr. ███:** Could you describe the mission, please?
+**Capt. █████████:** Yeah, sorry. We had two choppers, one with my team and one on backup with Zulu 9-B and Dr. ██████. We spotted the target about two clicks north of our patrol path. I'm guessing he wasn't facing our direction, else he would have taken us out then and there.
+**Dr. ███:** Your report says SCP-096 didn't react to the cold? It was -██o C.
+**Capt. █████████:** Actually, it was -██. And yes, it was butt naked and didn't so much as shiver. Anyway, we landed, approached the target, and Corporal ██ got ready to bag it. That's when Dr. ██████ called. I turned to answer it, and that's what saved me. The target must have turned and my whole squad saw it.
+**Dr. ███:** That's when SCP-096 entered an agitated emotional state?
+**Capt. █████████:** Yep. [Interviewed now pauses for a second before continuing] Sorry. Got the willies for a second.
+**Capt. █████████:** Yeah. Well, I never saw its face. My squad did, and they paid for it up the ass.
+**Dr. ███:** Could you describe it a little more, please?
+**Capt. █████████:** [Pauses] Yeah, yeah. It started screaming at us, and crying. Not animal roaring though, sounded exactly like a person. Really fucking creepy. [Pauses again] We started firing when it picked up Corporal ██ and ripped off his leg. God, he was screaming for our help… fuckin 'A… anyway, we were blowing chunks out of the target, round after round. Didn't do jackshit. I almost lost it when it started [DATA EXPUNGED] him.
+**Dr. ███:** That's when you ordered the use of an [Papers are heard moving] AT-4 HEDT launcher?
+**Capt. █████████:** An anti-tank gun. Started carrying it ever since SCP-███ got loose. I've seen those tear through tanks like tissue paper. Did the same thing to the target.
+**Dr. ███:** There was significant damage to SCP-096?
+**Capt. █████████:** It didn't even fucking flinch. It kept tearing apart my squad, but with half of its torso gone. [He draws a half-circle across his torso]
+**Dr. ███:** But it was taking damage?
+**Capt. █████████:** If it was, it wasn't showing it. It must have lost all its organs, all its blood, but it didn't acknowledge any of it. Its bone structure wasn't hurt at all, though. It kept tearing my squad apart.
+**Dr. ███:** So no actual structural damage. How many rounds would you say were fired at SCP-096?
+**Capt. █████████:** At the least? A thousand. Our door gunner kept his GAU-19 on it for at least twenty seconds. Twenty fucking seconds. That's six hundred .50 caliber rounds pumped into the thing. Might as well been spitting at it.
+**Dr. ███:** This is when Zulu 9-B arrived?
+**Capt. █████████:** Yeah, and my squad was gone. Zulu 9-B managed to get the bag over its head, and it just sat down. We got it into the chopper and got it here. I don't know how I never saw its face. Maybe God or Buddha or whoever thought I should live. The jackass.
+**Dr. ███:** We have obtained an artist's depiction of SCP-096's face. Would you like to view it?
+**Capt. █████████:** [Pauses] You know, after hearing that thing's screams, and the screams of my men, I don't think I want to put a face to what I heard. No. Just… no.
+**Dr. ███:** All right, I believe we are done here. Thank you, Captain.
+[Chairs are heard moving, and footsteps leave the room. Captain (Ret.) █████████ is confirmed to have left Interview Room 22.]
+**Dr. ███:** Let this be on record that I am formally requesting SCP-096 be terminated as soon as possible.
+
+Source 8: Scp 049
+URL: https://scp-wiki.wikidot.com/scp-049
+
+Title: SCP-049 - SCP Foundation
+!Image 1: 049_1_ntsc.png and monitored by no fewer than two armed guards.
+While SCP-049 is generally cooperative with most Foundation personnel, outbursts or sudden changes in behaviour are to be met with elevated force. Under no circumstances should any personnel come into direct contact with SCP-049 during these outbursts. In the event SCP-049 becomes aggressive, the application of lavender (_L. multifida_) has been shown to produce a calming effect on the entity. Once calmed, SCP-049 generally becomes compliant, and will return to containment with little resistance.
+In order to facilitate the ongoing containment of SCP-049, the entity is to be provided with the corpse of a recently deceased animal (typically a bovine or other mammal) once every two weeks for study. Corpses that become instances of SCP-049-2 are to be removed from SCP-049's containment cell and incinerated. SCP-049 is no longer permitted to interact with human subjects, and requests for human subjects are to be denied.
+**Temporary Containment Procedure Update:** (_See Addendum 049.3_) Per Containment Committee Order 049.S19.17.1, SCP-049 is no longer permitted to interact directly with any members of Foundation staff, nor is it to be provided with any additional corpses to be used in its surgeries. This order shall persist indefinitely, until such time a consensus regarding the ongoing containment of SCP-049 can be reached.
+**Description:** SCP-049 is a humanoid entity, roughly 1.9 meters in height, which bears the appearance of a medieval plague doctor. While SCP-049 appears to be wearing the thick robes and the ceramic mask indicative of that profession, the garments instead seem to have grown out of SCP-049's body over time 1, and are now nearly indistinguishable from whatever form is beneath them. X-rays indicate that despite this, SCP-049 does have a humanoid skeletal structure beneath its outer layer.
+!Image 2: 049xray.jpg So then, how should we begin? An introduction?
+**Dr. Hamm:** (_Aside_) Is that French? Can we get a translator-
+**SCP-049:** (_In English_) The King's English! No need for translation, sir, I can speak it well enough.
+**Dr. Hamm:** Good. My name is Dr. Raymond Hamm, and I-
+**SCP-049:** Ah! A doctor! A like-minded individual, no doubt. Wherein is your speciality, sir?
+**Dr. Hamm:** Cryptobiology, why-
+**SCP-049:** (_Laughs_) A medical man, such as myself. Wonders abound! And here I worried I had been abducted by common street thugs! (_Looks around the room_) This place, then. This is your laboratory? I had wondered, as clean as it is, and with such little trace of the Pestilence here.
+**Dr. Hamm:** The Pestilence? What do you mean?
+**SCP-049:** The Scourge! The Great Dying. Come now, you know, the, uh… (_taps temple furiously_) …what is it they call it, the… the… ah, no matter. The Pestilence, yes. It abounds outside these walls, you know. So many have succumbed, and many more will continue to, until such time as a perfect cure can be developed. (_Leans back in its chair_) Fortunately, I am very close. It is my duty in life to rid the world of it, you see. The Cure To End All Cures!
+**Dr. Hamm:** When you say "The Great Dying", are you talking about the bubonic plague?
+**SCP-049:** (_Pauses_) I don't know what that is.
+**Dr. Hamm:** I see. Right, well, the entities our agents encountered at that house, they were dead when you encountered them, yes? And you reanimated them?
+**SCP-049:** Hrmm, in a manner of speaking. You see things too simply, doctor! Expand your horizons. Life and death, sickness and health, these are amateur terms for amateur physicians. There is only one ailment that exists in the world of men, and that is the Pestilence. And nothing else! Make no mistake, they were very ill, all of them.
+**Dr. Hamm:** You think you cured those people?
+**SCP-049:** Indeed. My cure is _most_ effective.
+**Dr. Hamm:** The things we recovered were not human.
+**SCP-049:** (_Pauses and glares at Dr. Hamm_) Yes, well, it is not a _perfect_ cure. But that will come with time. And further experimentation! I have spent a lifetime developing my methods, Dr. Hamm, and will spend a lifetime more, if necessary. Now, we have wasted too much time. There is work to do! I will require a laboratory of my own, one where I can continue my research unimpeded. And assistants, of course, though I can provide those on my own, in time. (_Laughs_)
+**Dr. Hamm:** I don't think our organization will be willing to-
+**SCP-049:** Nonsense. We are all men of science. Fetch your coat and show me to my quarters, doctor. (_Gestures with pointed stick_) Our work begins now!
+_Interviewer's Note: While SCP-049 is capable of communicating in a very human way, there is a strange sense of unease that one experiences when in its presence. Make no mistake, there is something very uncanny about this entity indeed._
+_Additionally, we've confiscated that pointed stick that SCP-049 keeps waving around. Part of this was due to standard confiscation protocols for the possessions of anomalies, and part because 049 really is a menace swinging it around like he does. The entity was displeased at first, but after we made some concessions in providing it with "test subjects" (which are, admittedly, more for the benefit of our own research) it warmed up to the idea._
+**Addendum 049.2:** Observation Log
+While in containment at Site-19, SCP-049 has spent a considerable amount of time studying and performing surgery on the various mammalian corpses it has been provided. SCP-049 will routinely spend several days performing surgery, and then (regardless of whether or not the corpse becomes an instance of SCP-049-2) spending several more days documenting its findings in a thick leather journal stored within its doctor's bag. SCP-049 will often seek to its findings with members of Foundation staff.
+The following is a log of several occasions during which SCP-049 was observed operating on a mammalian corpse.
+**Observational Log 049.OL.1 SUMMARY**
+**Preface:** A test subject (D-85123) was introduced into SCP-049's containment cell. The entity expressed sincere gratitude towards all members of the containment and research staff.
+**Observation Notes:** SCP-049 began by asking D-85123 several standard medical questions, as it began removing tools from its bag. Shortly after finishing its preparations, SCP-049 quickly closed the distance between the two, killing the subject with a touch to its throat. Afterwards, SCP-049 made a number of considerable alterations to the basic structure of the subject's corpse, often introducing fluids from within its bag into the subject by way of a hand powered pump and copper tubing.
+The resulting 049-2 instance became animated, flailing and grasping at the walls of the chamber with a number of manufactured limbs while moaning out of an oblong orifice now present in its sternum. During this time, SCP-049 was observed taking notes of the instance in its journal, and remarking to the watching research staff about the efficacy of its cure. Security personnel entered the chamber to move SCP-049 back to containment, and were attacked by the instance. The security team dispatched the 049-2 instance, and SCP-049 returned to containment with no resistance, stating that it was pleased with the results.
+**Observational Log 049.OL.2 SUMMARY**
+**Preface:** SCP-049 was provided the corpse of a recently deceased goat. SCP-049 expressed gratitude at the provision.
+**Observation Notes:** SCP-049 operated on the goat corpse for several days, eventually resulting in an instance of SCP-049-2. SCP-049 expressed pleasure in this outcome, though admitted "the disease was still in its nascent stage. My veterinarian practice is rudimentary, but the patient responded well to the procedure."
+**Observational Log 049.OL.3 SUMMARY**
+**Preface:** SCP-049 was provided the corpse of a recently deceased orangutan. SCP-049 expressed noted gratitude at the provision, due to the similarities 
+
+Source 9: Scp 999
+URL: https://scp-wiki.wikidot.com/scp-999
+
+Title: SCP-999 - SCP Foundation
+**Special Containment Procedures:** SCP-999 is allowed to freely roam the facility should it desire to, but otherwise must stay in its pen either between 8PM-9PM for sleeping, or during emergency lockdowns for its own safety. Subject is not allowed out of its pen at night or off facility grounds at any time. Pen is to be kept clean and food replaced twice daily. All personnel are allowed inside SCP-999’s holding area, but only if they are not assigned to other tasks at the time, or if they are on break. Subject is to be played with when bored and spoken to in a calm, non-threatening tone.
+**Description:** SCP-999 appears to be a , amorphous, gelatinous mass of translucent orange slime, weighing about 54 kg (120 lbs) with a consistency similar to that of peanut butter. Subject’s size and shape is easily malleable and can change shape at will, though when at rest, SCP-999 becomes a rounded, oblate dome roughly 2 meters wide and 1 meter in height. The surface of SCP-999 consists of a thin, transparent membrane similar to that of an animal cell roughly .5 cm thick, and is highly elastic, allowing SCP-999 to flatten portions of its body up to 2 cm thin. This surface is also hydrophobic, although SCP-999 can willfully absorb liquids (see Addendum SCP-999-A). The rest of SCP-999's body is filled with a viscous orange substance of unknown chemical makeup, though it is capable of digesting organic materials with ease.
+Subject’s temperament is best described as playful and dog-like: when approached, SCP-999 will often react with overwhelming elation, slithering over to the nearest person and leaping upon them, “hugging” them with a pair of pseudopods while nuzzling the person’s face with a third pseudopod, all the while emitting high-pitched gurgling and cooing noises. The surface of SCP-999 emits a pleasing odor that differs with whomever it is interacting with. Recorded scents include chocolate, fresh laundry, bacon, roses, and Play-Doh™.
+Simply touching SCP-999’s surface causes an immediate mild euphoria, which intensifies the longer one is exposed to SCP-999, and lasts long after separation from the creature. Subject’s favorite activity is "tickle-wrestling", often by completely enveloping a person from the neck down and tickling them until asked to stop (though it does not always immediately comply with this request). Though injuries may occur, SCP-999 has never been found to purposefully attempt to harm others, and will immediately back away and contract its body into a quivering mound while gurgling in a matter similar to a whimpering dog, seemingly "apologizing" for hurting someone on accident.
+While the creature will interact with anyone, it seems to have a special interest in those who are unhappy or hurt in any way. Persons suffering from crippling depression or PTSD, for example, have reported having a far more positive outlook on life after multiple interactions with SCP-999. The possibility of manufacturing antidepressants from SCP-999's slime is currently being discussed.
+In addition to its playful behavior, SCP-999 seems to love all animals (especially humans), refusing to eat any meat and even risking its own life to save others, on one occasion leaping in front of a person to take a bullet fired at them (subject’s intellect is still up for debate: though its behavior is infantile, it seems to understand human speech and most modern technology, including guns). SCP-999’s diet consists entirely of candy and sweets, with M&M’s™ and Necco™ wafers being its favorites. Its eating methods are similar to those of an amoeba.
+**Addendum SCP-999-A:**_"Reminder to all staff: SCP-999 is not to consume caffeinated soft drinks of any kind. Last week someone gave SCP-999 a can of cola along with its usual breakfast- Not only was it literally bouncing off the walls for half an hour, the carbonation made SCP-999 visibly queasy afterwards, and it refused to move or eat the rest of the day. SCP-999 has thankfully recovered since, but the staff member in question has been reprimanded."_
+**Addendum SCP-999-B:** The following is a report from an experiment in which SCP-682
+**682:** (unintelligible groans, growling) What is that?
+SCP-999 moves in front of SCP-682, jumping up and down in a dog-like manner while calling out in a high-pitched squealing noise.
+SCP-682 immediately steps on SCP-999, completely flattening SCP-999. Observers were about to abort the experiment when SCP-682 started talking again.
+**682:** (grunts) Hmmm? (unintelligible) what is this… (low noise, similar to light chuckle) I feel… good…
+SCP-999 can be seen crawling up from between SCP-682’s toes, up along its side and around its neck, where it clings on and begins gently nuzzling with its pseudopod. A wide grin slowly spreads across SCP-682’s face.
+**682:** (deep chuckling) Feel… so… happy. Happy… (laughs) happy… happy…
+SCP-682 repeats the word “happy” for several minutes, laughing occasionally before escalating into nonstop laughter. As laughter continues, SCP-682 rolls around on its back, slamming its tail upon the floor with dangerous force.
+**682:** (bellowing laughter) Stop! No tickling! (continues laughing)
+SCP-682 and SCP-999 continue the “tickle fight” until SCP-682 finally wears down and appears to fall asleep with what would appear to be a smile on its face. After fifteen minutes with no activity, two D-Class personnel enter the room to retrieve SCP-999. When SCP-999 is removed, SCP-682 immediately wakes up and unleashes an unidentifiable wave of energy from its body, all the while laughing maniacally.
+All persons within the wave’s range collapse into crippling fits of laughter, allowing SCP-682 to escape and slaughter all in its path. Meanwhile, SCP-999 quickly rescues as many persons as it can, taking them to a safe place to recover from SCP-682’s "laughter wave" while agents suppress and re-contain SCP-682.
+Despite the tragedy that SCP-682 had brought upon the facility, SCP-999 has not shown any fear towards the creature and in fact has made gestures suggesting it wants to “play” with SCP-682 again. SCP-682, however, has stated, “That feculent little [unintelligible] can [DATA EXPUNGED] and die."
+_Memo from Dr. ████: “While the test was unsuccessful and ended in tragedy, that had to be the funniest thing I have ever seen. I never thought I’d see the day when I would regard SCP-682 as “cute”. Please send me a copy of the security tapes ASAP.”_
+
+Source 10: Scp 939
+URL: https://scp-wiki.wikidot.com/scp-939
+
+Title: SCP-939 - SCP Foundation
+**Special Containment Procedures:** SCP-939-1, -3, -19, -53, -89, -96, -98, -99, and -109 are kept in Cell 1163-A or 1163-B, 10 m x 10 m x 3 m containment chambers within Armed Bio-Containment Area-14. Both cells are environmentally regulated and negatively pressurized, with walls constructed of reinforced concrete. Access to these cells is regulated by an outer decontamination chamber and inner gas-tight steel security doors. Observation windows are constructed of laminated ballistics glass 10 cm in thickness protected by a 100kV electrified mesh. Humidity is maintained at 100% at a temperature of 16° C. Specimens are monitored at all times via infrared cameras. Level Four authorization is required to access SCP-939, their containment areas, or the observation chambers.
+SCP-939-101 is dismembered and stored in Cryogenic Preservation Tanks 939-101A to 939-101M within Bio-Research Area-12. Access to SCP-939-101 requires authorization by two Clearance Level 3 personnel, one of which must be present for all research and testing. The contents of only one (1) 939-101 tank may be accessed at any given time. Core temperature of SCP-939-101 tissues must be monitored while removed from cryogenic preservation; should core temperature exceed 10° C, tissues are to be returned to their corresponding tank and all testing suspended for a period of seventy-two (72) hours. Barring core temperature exceeding 10° C, research of SCP-939-101 tissues may continue as long as its ramblings and pleas for release may be tolerated.
+Containment cells should be cleaned biweekly. While this takes place, SCP-939 specimens will be transferred to the adjacent cell. During this time, the cell's door and observation window must be inspected for damage and repaired or replaced accordingly.
+Heavy sedation of all SCP-939 is required before any interaction, including transfer between cells and experimentation, may take place. See Document #939-TE4 for transfer and experimentation protocol.
+Level C Hazmat gear is to be worn by personnel during interactions with SCP-939 specimens and in any areas which SCP-939 have been known to inhabit. Afterward, standard decontamination procedures are to be observed by all personnel involved to ensure no secondary spread of amnestic agents occurs.
+Following Incident ABCA14-939-3, all non Class D personnel interacting with SCP-939 for any length of time are required to wear two (2) water-proof electronic pulse monitors for the duration of such interaction. These pulse monitors will transmit to a wireless monitoring system independent of a facility's main power grid, with at least one backup power system on standby. Should both an individual's pulse monitors flat-line or otherwise malfunction, the wearer will be presumed dead, personnel instructed to disregard all the wearer's subsequent vocalizations, and a breach of containment declared automatically. Security personnel responding to such a breach are likewise required to wear these pulse monitors.
+Additionally, all live SCP-939 must be implanted with subdermal tracking devices upon capture.
+**Description:** SCP-939 are endothermic, pack-based predators which display atrophy of various systems similar to troglobitic organisms. The skins of SCP-939 are highly permeable to moisture and translucent red, owing to a compound chemically similar to hemoglobin. SCP-939 average 2.2 meters tall standing upright and weigh an average of 250 kg, though weight is highly variable. Each of their four limbs end in three-fingered claws with a fourth, opposable digit, and are covered in setae which considerably augment climbing ability. Their heads are elongated, devoid of even vestigial eyes or eye sockets, and contain no brain casing. The jaws of SCP-939 are lined with red, faintly luminescent fang-like teeth, similar to those belonging to specimens of the genus _Chauliodus_, up to 6 cm in length, and encircled by heat-sensitive pit organs. Eye spots, sensitive to light and dark, run the length of their spined dorsal ridges. These spines may be up to 16 cm long and are believed to be sensitive to changes in air pressure and flow.
+SCP-939 do not possess many vital organ systems; central and peripheral nervous systems, circulatory system, and digestive tract are all absent. SCP-939's respiratory system is atrophied and serves no apparent purpose beyond spreading AMN-C227 (see below). SCP-939 have no apparent physiological need to feed, nor any way to digest consumed tissue. Ingested material typically accumulates in the respiratory system of SCP-939 and is regurgitated once the amount is sufficient to markedly inhibit its function. Despite the absence of many vital organ systems, SCP-939 are capable of bearing live young. See **Addendum 10-16-1991**.
+SCP-939's primary method of luring prey is the imitation of human speech in the voices of prior victims, though imitation of other species and active nocturnal hunts have been documented. SCP-939 vocalizations often imply significant distress; whether SCP-939 understand their vocalizations or are repeating previously heard phrases is the subject of ongoing study. How SCP-939 acquire voices is not currently understood; specimens have been documented imitating victims despite never hearing the victim speak. Analysis of SCP-939 vocalizations cannot distinguish between SCP-939 and samples of known victims' voices. The use of biometric voice-recognition security or identification systems at any installation housing SCP-939 is strongly discouraged for this reason. Prey is usually killed with a single bite to the cranium or neck; bite forces have been measured in excess of 35 MPa.
+SCP-939 exhale minute traces of an aerosolized Class C amnestic, designated AMN-C227. AMN-C227 causes temporary anterograde amnesia, inhibiting memory formation for the duration of exposure, plus an average of thirty (30) minutes. It is colorless, odorless, and tasteless with an estimated ECt50 for inhalation of 0.0015mg•min/m 3. In well-ventilated or open air environments, risk of exposure to ECt50 is greatly reduced but _not_ negligible. AMN-C227 is typically undetectable in the bloodstream sixty (60) minutes following cessation of exposure. Reported sensations of disorientation and mild hallucinations immediately following removal from environments saturated with the agent are similar to recreational use of numerous psychoactive substances and easily mistaken as such.
+**Note 03-23-2005:** This report pertains to morphology _alpha_. For information regarding morphology _beta_, see [REDACTED] Experiment Log 914 liters.
+**Addendum 09-20-1991:** Containment of nine (9) SCP-939 specimens has been compromised following a "Silent Night" breach scenario at Bio-Containment and Research Site-06. Nearby civilian settlements have been evacuated on the pretense of a coming storm. Recovery teams have been deployed to the area.
+**Addendum 10-16-1991:** [REDACTED] In light of this, all interaction with SCP-939 from September 8th to October 7th in the Northern Hemisphere or March 6th to April 4th in the Southern Hemisphere is strictly forbidden. [REDACTED] No male specimens of SCP-939 have yet been identified [REDACTED] contain a Class B amnestic [REDACTED]
+See Reproduction of SCP-939 **Addendum 02-20-1992:** Effective immediately, use of AMN-C227 as an amnestic is suspended indefinitely. Consult Incident Report AMN-C227-939 for further information.
+
+Source 11: Foundation Departments - SCP Foundation
+Published: 2026-04-10T00:00:00.000Z
+URL: https://scp-wiki.wikidot.com/departments
+
+The SCP Wiki's default theme failed to load. If you see this error and are experiencing graphical issues, you may be able to resolve it by refreshing the page. If you are on iOS, you may also need to clear your cache
+If the page you are on "looks fine," it is most likely (but not certainly) because its theme is overriding the SCP Wiki's default Sigma-10 theme. If you were to then navigate to a Sigma-10 page, such as the Front Page or
+Guide for Newcomers Join the Site Contribute FAQ Universe Hub Main Forum SCP by Series
+I II III IV V VI VII VIII IX X Other SCP
+Explained Joke International Feed
+
+Source 12: SCP-7640 - SCP Foundation
+Published: 2026-03-09T00:00:00.000Z
+URL: https://scp-wiki.wikidot.com/scp-7640
+
+The SCP Wiki's default theme failed to load. If you see this error and are experiencing graphical issues, you may be able to resolve it by refreshing the page. If you are on iOS, you may also need to clear your cache
+If the page you are on "looks fine," it is most likely (but not certainly) because its theme is overriding the SCP Wiki's default Sigma-10 theme. If you were to then navigate to a Sigma-10 page, such as the Front Page or
+Guide for Newcomers Join the Site Contribute FAQ Universe Hub Main Forum SCP by Series
+I II III IV V VI VII VIII IX X Other SCP
+Explained Joke International Feed
+
+Source 13: SCP-5105 - SCP Foundation
+Published: 2026-01-26T00:00:00.000Z
+URL: https://scp-wiki.wikidot.com/scp-5105
+
+The SCP Wiki's default theme failed to load. If you see this error and are experiencing graphical issues, you may be able to resolve it by refreshing the page. If you are on iOS, you may also need to clear your cache
+If the page you are on "looks fine," it is most likely (but not certainly) because its theme is overriding the SCP Wiki's default Sigma-10 theme. If you were to then navigate to a Sigma-10 page, such as the Front Page or
+Guide for Newcomers Join the Site Contribute FAQ Universe Hub Main Forum SCP by Series
+I II III IV V VI VII VIII IX X Other SCP
+Explained Joke International Feed
+
+Source 14: SunnyClockwork's Artwork - Personnel - SCP Foundation
+Published: 2026-03-29T00:00:00.000Z
+URL: https://scp-wiki.wikidot.com/sunny-art-personnel
+
+The SCP Wiki's default theme failed to load. If you see this error and are experiencing graphical issues, you may be able to resolve it by refreshing the page. If you are on iOS, you may also need to clear your cache
+If the page you are on "looks fine," it is most likely (but not certainly) because its theme is overriding the SCP Wiki's default Sigma-10 theme. If you were to then navigate to a Sigma-10 page, such as the Front Page or
+Guide for Newcomers Join the Site Contribute FAQ Universe Hub Main Forum SCP by Series
+I II III IV V VI VII VIII IX X Other SCP
+Explained Joke International Feed
+
+Source 15: SCP-9166 - SCP Foundation
+Published: 2026-03-24T00:00:00.000Z
+URL: https://scp-wiki.wikidot.com/scp-9166
+
+The SCP Wiki's default theme failed to load. If you see this error and are experiencing graphical issues, you may be able to resolve it by refreshing the page. If you are on iOS, you may also need to clear your cache
+If the page you are on "looks fine," it is most likely (but not certainly) because its theme is overriding the SCP Wiki's default Sigma-10 theme. If you were to then navigate to a Sigma-10 page, such as the Front Page or
+Guide for Newcomers Join the Site Contribute FAQ Universe Hub Main Forum SCP by Series
+I II III IV V VI VII VIII IX X Other SCP
+Explained Joke International Feed
+

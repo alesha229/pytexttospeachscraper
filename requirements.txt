@@ -4,3 +4,4 @@ openai
 Pillow
 pydub
 duckduckgo-search
+spandrel

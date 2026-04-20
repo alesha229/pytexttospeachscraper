@@ -11,11 +11,10 @@ from .scenario import VideoScenarioPlannerV2
 from .tts import tts, create_silence
 from .assembler import FastVideoAssembler, VideoScene
 from .ae_project import AEJsonGenerator
+from ..images.pipeline import ImagePipeline
 from ..images.whisk import ImageGenerator
-from ..images.search import ImageSearch
-from ..images.validator import ImageValidator
 from ..images.thumbnail import ThumbnailGenerator
-from ..config import VIDEO_OUTPUT_DIR, WHISK_COOKIE, TTS_DEFAULT_VOICE_ID
+from ..config import VIDEO_OUTPUT_DIR, WHISK_COOKIE, TTS_DEFAULT_VOICE_ID, HORROR_STYLE_PROMPT
 
 
 class VideoGeneratorV2:
@@ -28,6 +27,8 @@ class VideoGeneratorV2:
         use_real_photos: bool = True,
         use_stock_photos: bool = False,
         validate_images: bool = True,
+        enable_upscale: bool = True,
+        video_theme: str = None,
     ):
         self.fireworks_api_key = fireworks_api_key
         self.whisk_cookie = whisk_cookie or WHISK_COOKIE
@@ -35,6 +36,8 @@ class VideoGeneratorV2:
         self.use_real_photos = use_real_photos
         self.use_stock_photos = use_stock_photos
         self.validate_images = validate_images
+        self.enable_upscale = enable_upscale
+        self.video_theme = video_theme or HORROR_STYLE_PROMPT
 
         self.scenario_planner = VideoScenarioPlannerV2(api_key=fireworks_api_key)
         self.image_generator = None
@@ -47,26 +50,14 @@ class VideoGeneratorV2:
                 output_dir=str(VIDEO_OUTPUT_DIR / "thumbnails")
             )
 
-        self.validator = None
-        if self.validate_images and self.fireworks_api_key:
-            try:
-                self.validator = ImageValidator(api_key=self.fireworks_api_key)
-                print("   Image validator (Qwen VL) initialized")
-            except ValueError:
-                self.validator = None
-                print("   Failed to initialize validator (no API key)")
-
-        self.image_search = None
-        self.has_image_search = False
-        try:
-            self.image_search = ImageSearch(
-                pexels_key=pexels_api_key,
-                use_duckduckgo=use_real_photos,
-                validator=self.validator
-            )
-            self.has_image_search = True
-        except ValueError:
-            print("Failed to initialize image search.")
+        self.pipeline = ImagePipeline(
+            video_theme=self.video_theme,
+            validate_images=validate_images,
+            whisk_cookie=whisk_cookie,
+            fireworks_api_key=fireworks_api_key,
+            pexels_api_key=pexels_api_key,
+            enable_upscale=enable_upscale,
+        )
 
     def generate_video(
         self,
@@ -79,12 +70,15 @@ class VideoGeneratorV2:
         fast: bool = False,
         use_gpu: bool = True,
         generate_ae: bool = True,
+        context: str = None,
     ) -> str:
         print("\nStep 1: Generating scenario...")
         scenario = self.scenario_planner.create_scenario(
             topic=topic, language=language, target_duration=duration,
-            style=style, num_scenes=num_scenes
+            style=style, num_scenes=num_scenes, context=context
         )
+
+        self._set_video_theme(scenario)
 
         safe_title = "".join(c if c.isalnum() or c in " -_" else "_" for c in topic[:50]).strip()
         video_id = f"{safe_title}_{int(time.time())}"
@@ -114,17 +108,17 @@ class VideoGeneratorV2:
         assets_map = self._process_assets_manifest(scenario, assets_dir)
 
         audio_future = None
-        with ThreadPoolExecutor(max_workers=1) as audio_pool:
+        with ThreadPoolExecutor(max_workers=2) as pool:
             print("\nStarting audio generation in background...")
-            audio_future = audio_pool.submit(self._generate_audio, scenario, audio_dir)
+            audio_future = pool.submit(self._generate_audio, scenario, audio_dir)
 
-            print("\nStep 3: Generating background images...")
-            background_paths = self._generate_backgrounds(scenario, assets_dir, assets_map)
+            print("\nStep 3: Generating and upscaling background images...")
+            background_paths = self._generate_and_upscale_backgrounds(scenario, assets_dir, assets_map)
 
         print("\nWaiting for audio...")
         audio_paths = audio_future.result() if audio_future else {}
 
-        print("\nStep 5: Creating overlays...")
+        print("\nStep 4: Creating overlays...")
         overlay_paths = self._create_overlays(scenario, overlays_dir)
 
         print("\nStep 6: Assembling video...")
@@ -150,6 +144,8 @@ class VideoGeneratorV2:
         print("\nStep 8: Generating thumbnail...")
         thumbnail_path = self._generate_thumbnail(topic, video_base_dir)
 
+        self.pipeline.cleanup()
+
         print("\n" + "=" * 60)
         print(f"VIDEO V2 READY: {video_path}")
         if thumbnail_path:
@@ -165,12 +161,15 @@ class VideoGeneratorV2:
         duration: int = 30,
         style: str = None,
         num_scenes: int = None,
+        context: str = None,
     ) -> str:
         print("\nStep 1: Generating scenario...")
         scenario = self.scenario_planner.create_scenario(
             topic=topic, language=language, target_duration=duration,
-            style=style, num_scenes=num_scenes
+            style=style, num_scenes=num_scenes, context=context
         )
+
+        self._set_video_theme(scenario)
 
         safe_title = "".join(c if c.isalnum() or c in " -_" else "_" for c in topic[:50]).strip()
         video_id = f"{safe_title}_{int(time.time())}"
@@ -222,6 +221,8 @@ class VideoGeneratorV2:
         print("\nStep 7: Generating thumbnail...")
         self._generate_thumbnail(topic, video_base_dir)
 
+        self.pipeline.cleanup()
+
         print("\n" + "=" * 60)
         print(f"ASSETS V2 READY")
         print(f"Project dir: {video_base_dir}")
@@ -229,60 +230,14 @@ class VideoGeneratorV2:
 
         return video_base_dir
 
-    def _download_first_available(self, results: list, api, save_path: str) -> Optional[str]:
-        for idx, result in enumerate(results):
-            url = result.get("download_url", "")
-            if not url:
-                continue
-            try:
-                api.download(url, save_path)
-                return save_path
-            except Exception as e:
-                print(f"      Download error ({idx + 1}/{len(results)}): {e}")
-        return None
-
-    def _search_person_photo(self, name: str, desc: str, assets_dir: str, filename_prefix: str) -> Optional[str]:
-        queries = [desc or name, name, f"{name} portrait", f"{name} photo"]
-        seen = set(q.lower() for q in queries)
-        parts = name.strip().split()
-        if len(parts) >= 2:
-            for q in [f"{parts[0]} {parts[-1]}", f"{parts[-1]} {parts[0]}"]:
-                if q.lower() not in seen:
-                    queries.append(q)
-                    seen.add(q.lower())
-
-        for qi, search_query in enumerate(queries):
-            if not search_query:
-                continue
-            print(f"   Attempt {qi + 1}/{len(queries)}: '{search_query}'")
-            try:
-                if self.use_real_photos and self.has_image_search and "real" in self.image_search.services:
-                    results = self.image_search.search_person(name=search_query, source="real", count=1)
-                    if results:
-                        real_api = self.image_search.services.get("real")
-                        if real_api:
-                            asset_path = os.path.join(assets_dir, f"{filename_prefix}.jpg")
-                            downloaded = self._download_first_available(results, real_api, asset_path)
-                            if downloaded:
-                                return downloaded
-
-                if self.use_stock_photos and self.has_image_search and "pexels" in self.image_search.services:
-                    results = self.image_search.search(
-                        query=search_query, source="stock", stock_service="pexels",
-                        count=1, orientation="portrait"
-                    )
-                    if results:
-                        stock_api = self.image_search.services.get("pexels")
-                        if stock_api:
-                            asset_path = os.path.join(assets_dir, f"{filename_prefix}.jpg")
-                            downloaded = self._download_first_available(results, stock_api, asset_path)
-                            if downloaded:
-                                return downloaded
-            except Exception as e:
-                print(f"   Search error (attempt {qi + 1}): {e}")
-
-        print(f"   Could not find person photo online")
-        return None
+    def _set_video_theme(self, scenario: dict):
+        metadata = scenario.get("metadata", {})
+        vibe = metadata.get("vibe", "")
+        theme = self.video_theme
+        if vibe and len(vibe) > len(theme):
+            theme = vibe
+        self.video_theme = theme
+        self.pipeline.set_theme(theme)
 
     def _process_assets_manifest(self, scenario: dict, assets_dir: str) -> dict:
         assets_map = {}
@@ -303,60 +258,43 @@ class VideoGeneratorV2:
                 continue
 
             print(f"   Processing: {asset_name} ({asset_type})")
-            asset_found = False
+
+            image_path = None
+            block_idx = abs(hash(asset_name)) % 10000
 
             if asset_type == "person":
-                prefix = f"person_{self._safe_asset_filename(search_query or asset_name)}"
-                result = self._search_person_photo(search_query or asset_name, asset_desc, assets_dir, prefix)
-                if result:
-                    assets_map[asset_name] = result
-                    asset_found = True
-                else:
-                    assets_map[asset_name] = self._create_person_placeholder(asset_name, asset_desc, assets_dir)
-                    asset_found = True
-
-            if not asset_found and self.use_stock_photos and self.has_image_search and "pexels" in self.image_search.services:
-                try:
-                    search_term = search_query or asset_desc or asset_name
-                    results = self.image_search.search(
-                        query=search_term, source="stock", stock_service="pexels",
-                        count=1, orientation="landscape"
-                    )
-                    if results:
-                        stock_api = self.image_search.services.get("pexels")
-                        if stock_api:
-                            asset_path = os.path.join(assets_dir, f"stock_{self._safe_asset_filename(search_query or asset_name)}.jpg")
-                            downloaded = self._download_first_available(results, stock_api, asset_path)
-                            if downloaded:
-                                assets_map[asset_name] = downloaded
-                                asset_found = True
-                except Exception as e:
-                    print(f"   Stock search error: {e}")
-
-            if not asset_found and self.use_real_photos and self.has_image_search and "real" in self.image_search.services:
-                try:
-                    search_term = search_query or asset_desc or asset_name
-                    if asset_type == "location":
-                        results = self.image_search.search_location(name=search_term, source="real", count=1)
-                    else:
-                        results = self.image_search.search(query=search_term, source="real", count=1)
-                    if results:
-                        real_api = self.image_search.services.get("real")
-                        if real_api:
-                            asset_path = os.path.join(assets_dir, f"real_{self._safe_asset_filename(search_query or asset_name)}.jpg")
-                            downloaded = self._download_first_available(results, real_api, asset_path)
-                            if downloaded:
-                                assets_map[asset_name] = downloaded
-                                asset_found = True
-                except Exception as e:
-                    print(f"   Real photo search error: {e}")
-
-            if not asset_found:
-                print(f"   Generating image via Whisk...")
-                clean_prompt = self._clean_prompt_for_whisk(asset_name, asset_desc, asset_type)
-                assets_map[asset_name] = self._generate_image_with_whisk(
-                    clean_prompt, hash(asset_name) % 10000, assets_dir, asset_type=asset_type
+                image_path = self.pipeline.get_person_image(
+                    name=search_query or asset_name,
+                    desc=asset_desc,
+                    assets_dir=assets_dir,
+                    filename_prefix=f"person_{self._safe_asset_filename(search_query or asset_name)}",
+                    block_index=block_idx,
                 )
+            else:
+                query = search_query or asset_desc or asset_name
+                orientation = "landscape" if asset_type == "location" else "landscape"
+                image_path = self.pipeline.get_image(
+                    query=query,
+                    image_type=asset_type,
+                    orientation=orientation,
+                    assets_dir=assets_dir,
+                    block_index=block_idx,
+                )
+
+            if image_path:
+                assets_map[asset_name] = image_path
+            elif asset_type == "person":
+                assets_map[asset_name] = self._create_person_placeholder(asset_name, asset_desc, assets_dir)
+            else:
+                clean_prompt = self._clean_prompt_for_whisk(asset_name, asset_desc, asset_type)
+                generated = self.pipeline.generate_image(
+                    prompt=clean_prompt, block_index=block_idx,
+                    assets_dir=assets_dir, asset_type=asset_type,
+                )
+                if generated:
+                    assets_map[asset_name] = generated
+                else:
+                    assets_map[asset_name] = self._create_placeholder_image(block_idx, assets_dir)
 
         return assets_map
 
@@ -417,6 +355,85 @@ class VideoGeneratorV2:
         img.save(path)
         return path
 
+    def _generate_and_upscale_backgrounds(self, scenario: dict, assets_dir: str, assets_map: dict) -> dict:
+        background_paths = {}
+        timeline = scenario.get("timeline", [])
+        total_bg = len(timeline)
+
+        for i, block in enumerate(timeline):
+            bg = block.get("background", {})
+            bg_type = bg.get("type", "generated_image")
+            bg_prompt = bg.get("prompt", "")
+
+            if not bg_prompt:
+                background_paths[i] = self._create_placeholder_image(i, assets_dir)
+                continue
+
+            if total_bg > 20:
+                print(f"   Background [{i + 1}/{total_bg}]: {bg_type} - {bg_prompt[:40]}...")
+            else:
+                print(f"   Block {i + 1}: {bg_type} - {bg_prompt[:50]}...")
+            try:
+                image_path = None
+                bg_target = f"background_{i + 1}.png"
+
+                if bg_type == "person_photo":
+                    person_name = bg_prompt.split(":")[0] if ":" in bg_prompt else bg_prompt
+                    print(f"   Searching for person photo: {person_name}")
+                    if person_name in assets_map:
+                        image_path = assets_map[person_name]
+                        image_path = self.pipeline._check_and_refine_style(
+                            image_path, bg_prompt, assets_dir, i + 1,
+                            target_name=bg_target,
+                        )
+                    else:
+                        image_path = self.pipeline.get_person_image(
+                            name=person_name, desc=bg_prompt,
+                            assets_dir=assets_dir,
+                            filename_prefix=f"bg_person_{i + 1}",
+                            block_index=i + 1,
+                        )
+                    if not image_path:
+                        image_path = self._create_person_placeholder(person_name, bg_prompt, assets_dir)
+
+                elif bg_type == "stock_photo":
+                    image_path = self.pipeline.get_image(
+                        query=bg_prompt, image_type="stock",
+                        orientation="landscape", assets_dir=assets_dir,
+                        block_index=i + 1,
+                    )
+
+                if not image_path:
+                    clean_bg_prompt = self._clean_prompt_for_whisk(
+                        bg_prompt.split(":")[0] if ":" in bg_prompt else "", bg_prompt, bg_type
+                    )
+                    image_path = self.pipeline.generate_image(
+                        prompt=clean_bg_prompt, block_index=i + 1,
+                        assets_dir=assets_dir, asset_type=bg_type,
+                        target_name=bg_target,
+                    )
+
+                if not image_path:
+                    image_path = self._create_placeholder_image(i, assets_dir)
+
+                if self.enable_upscale:
+                    print(f"   Starting upscale for background {i + 1}...")
+                    try:
+                        image_path = self.pipeline.upscale_image(image_path, assets_dir, i + 1,
+                                                                  target_name=bg_target)
+                        print(f"   Upscaled: {os.path.basename(image_path)}")
+                    except Exception as e:
+                        print(f"   Upscale failed: {e}")
+
+                background_paths[i] = image_path
+            except Exception as e:
+                print(f"   Error: {e}")
+                background_paths[i] = self._create_placeholder_image(i, assets_dir)
+
+            time.sleep(1 if total_bg > 30 else 2)
+
+        return background_paths
+
     def _generate_backgrounds(self, scenario: dict, assets_dir: str, assets_map: dict) -> dict:
         background_paths = {}
         timeline = scenario.get("timeline", [])
@@ -431,105 +448,54 @@ class VideoGeneratorV2:
 
             print(f"   Block {i + 1}: {bg_type} - {bg_prompt[:50]}...")
             try:
+                image_path = None
+                bg_target = f"background_{i + 1}.png"
+
                 if bg_type == "person_photo":
                     person_name = bg_prompt.split(":")[0] if ":" in bg_prompt else bg_prompt
                     if person_name in assets_map:
-                        background_paths[i] = assets_map[person_name]
-                        continue
-                    result = self._search_person_photo(person_name, bg_prompt, assets_dir, f"bg_person_{i + 1}")
-                    if result:
-                        background_paths[i] = result
-                        continue
-                    background_paths[i] = self._create_person_placeholder(person_name, bg_prompt, assets_dir)
-                    continue
+                        image_path = assets_map[person_name]
+                        image_path = self.pipeline._check_and_refine_style(
+                            image_path, bg_prompt, assets_dir, i + 1,
+                            target_name=bg_target,
+                        )
+                    else:
+                        image_path = self.pipeline.get_person_image(
+                            name=person_name, desc=bg_prompt,
+                            assets_dir=assets_dir,
+                            filename_prefix=f"bg_person_{i + 1}",
+                            block_index=i + 1,
+                        )
+                    if not image_path:
+                        image_path = self._create_person_placeholder(person_name, bg_prompt, assets_dir)
 
-                if bg_type == "stock_photo":
-                    if self.use_stock_photos and self.has_image_search and "pexels" in self.image_search.services:
-                        results = self.image_search.search(query=bg_prompt, source="stock",
-                                                           stock_service="pexels", count=1, orientation="landscape")
-                        if results:
-                            stock_api = self.image_search.services.get("pexels")
-                            if stock_api:
-                                asset_path = os.path.join(assets_dir, f"bg_stock_{i + 1}.jpg")
-                                downloaded = self._download_first_available(results, stock_api, asset_path)
-                                if downloaded:
-                                    background_paths[i] = downloaded
-                                    continue
+                elif bg_type == "stock_photo":
+                    image_path = self.pipeline.get_image(
+                        query=bg_prompt, image_type="stock",
+                        orientation="landscape", assets_dir=assets_dir,
+                        block_index=i + 1,
+                    )
 
-                clean_bg_prompt = self._clean_prompt_for_whisk(
-                    bg_prompt.split(":")[0] if ":" in bg_prompt else "", bg_prompt, bg_type
-                )
-                background_paths[i] = self._generate_image_with_whisk(
-                    clean_bg_prompt, i + 1, assets_dir, asset_type=bg_type
-                )
+                if not image_path:
+                    clean_bg_prompt = self._clean_prompt_for_whisk(
+                        bg_prompt.split(":")[0] if ":" in bg_prompt else "", bg_prompt, bg_type
+                    )
+                    image_path = self.pipeline.generate_image(
+                        prompt=clean_bg_prompt, block_index=i + 1,
+                        assets_dir=assets_dir, asset_type=bg_type,
+                        target_name=bg_target,
+                    )
+
+                if not image_path:
+                    image_path = self._create_placeholder_image(i, assets_dir)
+
+                background_paths[i] = image_path
             except Exception as e:
                 print(f"   Error: {e}")
                 background_paths[i] = self._create_placeholder_image(i, assets_dir)
 
             time.sleep(2)
         return background_paths
-
-    def _generate_image_with_whisk(self, prompt: str, block_index: int, assets_dir: str,
-                                    asset_type: str = None) -> str:
-        print(f"   Generating image for block {block_index}...")
-        try:
-            saved_paths = self.image_generator.generate(
-                prompt=prompt, model="IMAGEN_3_5",
-                aspect_ratio="IMAGE_ASPECT_RATIO_LANDSCAPE", seed=0, count=1
-            )
-        except Exception as e:
-            err = str(e).upper()
-            if "PROMINENT_PEOPLE" in err or "PEOPLE_FILTER" in err or "PUBLIC_ERROR" in err:
-                generic = self._anonymize_prompt(prompt, asset_type)
-                if generic != prompt:
-                    try:
-                        saved_paths = self.image_generator.generate(
-                            prompt=generic, model="IMAGEN_3_5",
-                            aspect_ratio="IMAGE_ASPECT_RATIO_LANDSCAPE", seed=0, count=1
-                        )
-                    except Exception:
-                        saved_paths = []
-                else:
-                    saved_paths = []
-            elif "400" in str(e):
-                simplified = self._simplify_prompt(prompt)
-                try:
-                    saved_paths = self.image_generator.generate(
-                        prompt=simplified, model="IMAGEN_3_5",
-                        aspect_ratio="IMAGE_ASPECT_RATIO_LANDSCAPE", seed=0, count=1
-                    )
-                except Exception:
-                    saved_paths = []
-            else:
-                return self._create_placeholder_image(block_index - 1, assets_dir)
-
-        if saved_paths:
-            old_path = saved_paths[0]
-            new_path = os.path.join(assets_dir, f"background_{block_index}.png")
-            if os.path.exists(old_path):
-                if os.path.exists(new_path):
-                    os.remove(new_path)
-                os.rename(old_path, new_path)
-            return new_path
-        return self._create_placeholder_image(block_index - 1, assets_dir)
-
-    @staticmethod
-    def _anonymize_prompt(prompt: str, asset_type: str = None) -> str:
-        if asset_type == "person" or asset_type == "person_photo":
-            return "A professional portrait of a person in a studio setting, neutral background, photorealistic"
-        if ":" in prompt:
-            after = ":".join(prompt.split(":")[1:]).strip()
-            if after:
-                return after
-        return re.sub(r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)+\b', 'a person', prompt)
-
-    @staticmethod
-    def _simplify_prompt(prompt: str) -> str:
-        simplified = re.sub(r'[^\w\s,.-]', '', prompt)
-        words = simplified.split()
-        if len(words) > 20:
-            simplified = ' '.join(words[:20])
-        return simplified.strip()
 
     def _create_placeholder_image(self, block_index: int, assets_dir: str) -> str:
         img = Image.new("RGB", (1920, 1080), (30, 30, 60))
@@ -549,10 +515,13 @@ class VideoGeneratorV2:
     def _generate_audio(self, scenario: dict, audio_dir: str) -> dict:
         audio_paths = {}
         timeline = scenario.get("timeline", [])
+        total = len(timeline)
         for i, block in enumerate(timeline):
             voiceover = block.get("voiceover", "")
             if not voiceover:
                 continue
+            if total > 20:
+                print(f"   Audio [{i + 1}/{total}]: {voiceover[:50]}...")
             audio_path = os.path.join(audio_dir, f"block_{i + 1}.wav")
             voice_id = self.voice_id
             try:
@@ -563,7 +532,7 @@ class VideoGeneratorV2:
                     audio_paths[i] = create_silence(5, audio_path)
             except Exception:
                 audio_paths[i] = create_silence(5, audio_path)
-            time.sleep(0.5)
+            time.sleep(0.3 if total > 30 else 0.5)
         return audio_paths
 
     def _create_overlays(self, scenario: dict, overlays_dir: str) -> dict:

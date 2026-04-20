@@ -1,0 +1,150 @@
+Item  SCP-7813
+Object Class Keter
+
+Special Containment Procedures
+SCP-7813 is located on Fisher Island, Manitoba, near the Saskatchewan River, on the former grounds of the MacKay Indian Residential School. A 2 kilometer exclusion zone has been established around the site, officially designated as contaminated federal land undergoing environmental remediation. No civilian access is permitted. Foundation personnel assigned to Site-7813 must not enter Cabin 13 alone. Personnel with personal or familial connections to the Canadian Residential School System are permanently excluded from assignment to this site.
+
+Monitoring stations positioned along the Saskatchewan River must record all acoustic anomalies within a 5 kilometer radius between the hours of 11 PM and 4 AM. Any recording matching Pattern Sigma-7, characterized by the sound of multiple child voices speaking Cree, Ojibwe, or Dene in unison, must trigger an immediate Site-7813 lockdown.
+
+Under no circumstances are personnel to remove any shed skin samples from Cabin 13. All biological residue must be catalogued and incinerated on-site within 6 hours of manifestation.
+
+Description
+SCP-7813 refers to a localized anomalous phenomenon centered on a structure designated Cabin 13, situated on the northeastern shore of Fisher Island near The Pas, Manitoba. Cabin 13 is a one-room log cabin of uncertain construction date, though architectural analysis suggests elements consistent with early 20th century building methods. The cabin measures approximately 6 by 4 meters and contains a single iron frame bed, a wood-burning stove of a model manufactured between 1910 and 1920, and a root cellar accessible through a floor hatch.
+
+The anomaly manifests cyclically. Every 27 days, corresponding to the lunar month, Cabin 13 undergoes what researchers have termed a Shedding Event. During these events, the interior of the cabin becomes saturated with an unidentified organic residue resembling shed reptilian skin. The material appears sequentially, layer upon layer, accumulating to depths of up to 30 centimeters. Each layer is translucent, papery, and carries the impression of scales. Chemical analysis of the residue has proven inconclusive. The material does not match any known reptile species and degrades rapidly when exposed to ultraviolet light.
+
+Concurrent with the physical manifestation, acoustic phenomena are detected within the cabin and the surrounding 500 meters. These sounds include whispered prayers in English and Cree, the distinct rhythm of a belt striking flesh, children weeping, and on three documented occasions, a voice reciting what linguistic analysis has identified as an Anglican communion liturgy delivered backward.
+
+The most significant and dangerous aspect of SCP-7813 manifests during what is designated a Waking Event. Waking Events have occurred four times since Foundation containment began in 2019. During a Waking Event, the shed skin material within Cabin 13 coalesces into a humanoid figure, designated SCP-7813-1.
+
+SCP-7813-1 appears as a tall, emaciated figure between 2.2 and 2.8 meters in height. Its body is composed entirely of the translucent shed skin material, layered in visible sheets that shift and move across its form as though breathing. The face of SCP-7813-1 is the most consistently reported feature across all encounters. Witnesses describe a mask-like visage with features that shift between two distinct presentations. The first presentation is the face of an elderly Caucasian male with a clerical collar visible at the throat, identified by historical records as consistent with the appearance of Anglican clergy who administered the MacKay Indian Residential School between 1914 and 1933. The second presentation is the face of a young Indigenous child, mouth open as though screaming. These two faces alternate at irregular intervals, the skin stretching and tearing as one replaces the other.
+
+SCP-7813-1 is hostile to human observers. During Waking Events, it attempts to leave Cabin 13 and move toward the nearest human settlement. It has been documented speaking in multiple voices simultaneously, alternating between an adult male voice issuing commands in English and the voices of children pleading in Cree and Ojibwe. Physical contact with SCP-7813-1 results in rapid desiccation of skin tissue at the point of contact, with the affected area shedding in sheets identical to the material found in Cabin 13.
+
+Discovery History
+The Foundation became aware of SCP-7813 following a series of reports from the Opaskwayak Cree Nation in 2018. Elders of the community had long spoken of the weeping place on Fisher Island, a location where the sounds of children could be heard on certain nights despite the school having been demolished decades prior. These accounts were initially dismissed as local folklore until the incident that brought the anomaly to Foundation attention.
+
+In October 2018, a group of five young adults from The Pas traveled to Fisher Island to explore the ruins of the former residential school site. Their account, reconstructed from interviews with the two survivors and law enforcement reports, forms the basis of the initial incident log.
+
+The group had located the foundation remains of the MacKay Indian Residential School and spent approximately two hours photographing the site. As dusk fell, they discovered Cabin 13, which none of them had expected to find standing. One member of the group, identified as D.K., age 22, entered the cabin alone. What followed is reconstructed from the testimony of the survivors.
+
+Incident Log 7813-A
+October 14 2018
+
+1930 hours. Group arrives at Fisher Island. Five individuals identified as D.K., M.L., S.P., J.T., and A.W. Ages range from 19 to 24.
+
+2045 hours. Group locates foundation of former school structure. Photographs taken.
+
+2115 hours. Cabin 13 is discovered approximately 200 meters northeast of the school foundation, partially concealed by vegetation. D.K. enters the cabin alone despite protests from other group members.
+
+2120 hours. M.L. reports hearing D.K. scream from inside the cabin. The scream changes pitch midway through, beginning as an adult male voice and ending as what M.L. described as a child shrieking.
+
+2122 hours. The cabin door slams shut from inside. M.L. and J.T. attempt to open it. The door will not move. S.P. notices the shed skin material beginning to seep from beneath the door and from between the cabin logs.
+
+2125 hours. A.W. flees toward the boat. S.P. follows. M.L. and J.T. remain at the cabin door.
+
+2130 hours. M.L. reports that the cabin began to shake and that she could hear multiple voices from inside, some praying, some screaming, and one voice that she described as hissing, like a snake but speaking English, saying let me shed, let me shed, let me shed.
+
+2134 hours. The door of Cabin 13 bursts open. D.K. emerges. M.L. states that D.K. was not the same. His skin appeared loose, hanging from his body in sheets. His eyes were open but she could see something moving behind them, something that was not him. D.K. spoke in a voice that M.L. identified as belonging to an old man, saying the children must be cleansed, the children must be cleansed, the serpent bears the sin.
+
+2136 hours. J.T. attempts to restrain D.K. Upon physical contact, J.T. reports an immediate sensation of his skin tightening and cracking. He releases D.K. and observes that his own hands are shedding skin in transparent sheets.
+
+2138 hours. D.K. walks toward the river, still speaking in the old man voice. M.L. and J.T. flee.
+
+2145 hours. S.P. and A.W., having reached the boat, observe D.K. walking into the Saskatchewan River. He does not resurface. The river surface ripples for approximately 30 seconds before becoming still.
+
+2200 hours. M.L., J.T., S.P., and A.W. contact the RCMP.
+
+Foundation operatives embedded within the RCMP intercepted the report. Amnestics were administered to the survivors and law enforcement personnel. J.T. received medical treatment for the desiccation injury to his hands, which was attributed to chemical exposure. D.K. was classified as a missing person in official records.
+
+Test Results
+Following containment establishment, D-Class personnel were utilized to investigate the interior of Cabin 13 during non-manifestation periods.
+
+Test 7813-1
+D-8841 entered Cabin 13 during a quiescent period. The cabin interior was clean with no visible residue. D-8841 reported an overwhelming smell of cedar and sage, and the sensation of being watched by multiple unseen observers. After 12 minutes, D-8841 reported hearing a child whisper in Cree near the floor hatch. Translation determined the whisper said he is coming back, he always comes back. D-8841 was extracted without incident.
+
+Test 7813-2
+D-8841 was instructed to open the floor hatch and descend into the root cellar. D-8841 descended and reported a space approximately 2 meters deep and 3 meters square. The walls were lined with scratched tally marks. D-8841 counted over 400 individual marks. In the center of the cellar floor, D-8841 discovered a pile of shed skin material approximately 15 centimeters deep, despite the cabin interior being clean upon entry. Beneath the skin, D-8841 found a clerical collar of the type worn by Anglican clergy, heavily deteriorated. When D-8841 touched the collar, he reported experiencing a vivid visual hallucination of a young Indigenous girl hanging from a beam by a rope, her face shifting between human and serpentine features. D-8841 screamed and was immediately extracted.
+
+Test 7813-3
+During a Shedding Event, D-9202 was equipped with recording equipment and instructed to observe from outside Cabin 13 through a window. D-9202 observed the skin material manifesting in midair, falling in sheets that arranged themselves on the floor in concentric rings. After 22 minutes of observation, D-9202 reported that the sheets of skin began to rise, forming a rough humanoid shape. At this point, D-9202 broke protocol and fled the observation position. Review of recording equipment footage confirmed the manifestation of SCP-7813-1. The entity stood in the center of the cabin for 4 minutes and 33 seconds before collapsing back into inert skin material. Audio analysis of the recording captured the entity speaking in a language later identified as an archaic dialect of Cree, saying I wore their skin, I wore their skin, seven skins I shed but the seventh would not burn.
+
+Addendum 7813-1 Historical Context
+Research into the history of the MacKay Indian Residential School has revealed several relevant findings. The school operated from 1914 to 1933 at the Fisher Island location, enrolling approximately 70 to 80 students at a time, though records indicate the school frequently housed more children than it could accommodate. The school was operated by the Anglican Bishop and Diocese of Saskatchewan, later transferring to the Missionary Society of the Church of England in Canada in 1922.
+
+Survivor testimony collected by the National Centre for Truth and Reconciliation includes accounts of physical abuse, cultural suppression, and the deaths of children who attended the school. Several testimonies reference a specific clergyman, unnamed in official records but described as tall and severe, who survivors recalled with particular fear. One testimony describes this clergyman telling children that their Indigenous ways were the skin of the serpent and that he would shed them of it.
+
+Of particular note is the testimony of a survivor who described a punishment practiced at the school wherein children who spoke their native language were confined to the root cellar of an outbuilding for periods of up to 24 hours. The survivor described hearing scratching sounds in the cellar walls and the voice of a child who had died there previously.
+
+Foundation historians have been unable to locate records of Cabin 13 in any archival material related to the school. The cabin does not appear on any known site plans or photographs. Local oral history, however, references a building where the priest who wore two faces would take the children.
+
+Addendum
+
+---SOURCES---
+
+Source 1: MacKay Indian Residential School: Difference between revisions - Wikipedia
+Published: 2026-03-26T00:00:00.000Z
+URL: https://en.wikipedia.org/wiki/Special:Diff/1345629985
+
+Revision as of 04:36, 27 March 2026 |url= |website=Manitoba Historical Society Archives}}
+{{cite web |title=Historic Sites of Manitoba: MacKay Indian Residential School (Opaskwayak Cree Nation) |url= |website=Manitoba Historical Society Archives}}
+{{cite web |url= |website=National Centre for Truth and Reconciliation}}
+{{cite web |url= |website=National Centre for Truth and Reconciliation}}
+{{cite web |last1=Milosz |first1=Magdalena |title=Settler-Colonial Modern |url= |website=Canadian Architect}}
+Revision as of 04:39, 27 March 2026
+MacKay Indian Residential School (also known as McKay Residential School) was part of the Canadian Residential School System in Northern Manitoba. It was one of the rare schools that established two different locations. The First School that ran from 1914 to 1933 on Fisher Island was located on Opaskwayak Cree Nation close to The Pas and the second was in Dauphin and ran from 1957 to 1969.[1]
+History of MacKay Indian Residential School, The Pas
+From 1914-1933, the original MacKay Indian Residential School was located close to The Pas reserve on Fisher Island, Manitoba and near the Saskatchewan River. Students who attended this school were typically from local reserves around The Pas. There were students on occasion who originated from other nearby reserves such as the James Smith Reserve if approved by the government.[2]
+During its existence at The Pas location, the school was referred to various names from The Pas Indian Boarding School in the beginning in 1914 to the MacKay Indian Residential School when its operations at this location ceased in 1933. To operate, the school received financial resources from the Government of Canada. Functioning as a boarding school, the MacKay Indian Residential School was operated and managed by the Anglican Bishop and Diocese of Saskatchewan with a mix of church bodies overseeing it during its first eight years of existence and later transferring to the Missionary Society of the Church of England in Canada at a later date in 1922 until 1933.[3]
+The institution enrolled approximately 70-80 students at a time. However, the school often housed more students than it could accommodate. The MacKay Residential School provided Indigenous children with basic education, religious instruction, and agricultural and manual labour tasks. During the in
+
+Source 2: The Bewitched Prince (Italian folktale)
+Published: 2026-02-28T00:00:00.000Z
+URL: https://en.wikipedia.org/wiki/The_Bewitched_Prince_(Italian_folktale)
+
+The Bewitched Prince (Italian is an Italian fairy tale. In type ATU 433B, a queen gives birth to a son in snake form; years later, he wants to marry, and the king brings in maidens for him to marry, but he kills them; a mistreated stepdaughter is advised by a woman or her dead mother to don many shirts for the wedding night with the snake prince; she removes a shirt and tells the prince to remove one snakeskin; she then burns the skins to retain his human form.
+Renato Aprile, editor of the Italian Index of Tales of Magic, listed the story under type AT 433, Il figlio serpente ("The Serpent Son"), more specifically under type AT 433B, a type which he considered to be an "abbreviated form" of type AT 425A. He also grouped under tale type 433 the subtype AT 433A, where the snake carries the heroine home with him and is restored to human form by her kiss.
+#### The lindworm's disenchantment
+Scholar Jan-Öjvind Swahn in his work about Cupid and Psyche and other Animal as Bridegroom tales, described that the King Lindworm tales are "usually characterized" by the motifs of "release by bathing" and "7 shifts and 7 skins". Similarly, according to Birgit Olsen, "in most versions" the heroine is advised by her mother's spirit to wear many shifts for her wedding night with the lindworm prince. In addition, according to Renato Aprile, editor of the Italian Index of Tales of Magic, tale type AT 433B contains the serpent husband, and the heroine being inspired by her dead mother and disenchanting him by burning his skin.
+Italian author Italo Calvino located "other versions" wherein the snake prince sheds off his seven skins in Tuscany, Campania, Sicily and Piedmont.
+In a Friulian tale titled Li' vintisièt ciamesis ("The Twenty-Seve
+
+Source 3: MacKay Indian Residential School: Difference between revisions - Wikipedia
+Published: 2026-03-26T00:00:00.000Z
+URL: https://en.wikipedia.org/wiki/Special:Diff/1345627564/cur
+
+Revision as of 04:21, 27 March 2026 was part of the [[Canadian Indian residential school system|Canadian Residential School System]] in Northern Manitoba. It was one of the rare schools that established two different locations. The First School that ran from 1914 to 1933 on Fisher Island was located on [[Opaskwayak Cree Nation]] close to [[The Pas]] and the second was in [[Dauphin, Manitoba|Dauphin]] and ran from 1957 to 1969.
+'''MacKay Indian Residential School''' (also known as McKay Residential School) was part of the [[Canadian Indian residential school system|Canadian Residential School System]] in Northern Manitoba. It was one of the rare schools that established two different locations. The first school that ran from 1914 to 1933 on Fisher Island was located on [[Opaskwayak Cree Nation]] close to [[The Pas]] and the second was in [[Dauphin, Manitoba|Dauphin]] and ran from 1957 to 1969. {{cite news |last1=CBC News |title=Where were Manitoba's residential schools — and what stands there now? |url= |access-date=10 March 2026 |date=|year=2021|orig-date=June 06}}
+== History of MacKay Indian Residential School, The Pas ==
+== History of MacKay Indian Residential School, The Pas ==
+From 1914-1933, the original MacKay Indian Residential School was located close to The Pas reserve on Fisher Island, Manitoba and near the Saskatchewan River. Students who attended this school were typically from local reserves around The Pas. There were students on occasion who originated from other nearby reserves such as the [[James Smith Cree Nation|James Smith Reserve]] – if approved by the government. {{cite web |title=Historic Sites of Manitoba: MacKay Indian Residential School (Opaskwayak Cree Nation) |url= |website=Manitoba Historical Society Archives}}
+From 1914 to 1933, the original MacKay Indian Residential School was located close to The Pas reserve on Fisher Island, Manitoba and near the Saskatchewan River. Students who attended this school were typically from local reserves around The Pas. There were students on occasion who originated from other nearby reserves such as the [[James Smith Cree Nation|James Smith Reserve]] – if approved by the government. {{cite web |title=MacKay Residential School |url= |website=National Centre for Truth and Reconciliation |access-date=11 March 2026}}
+During its existence at The Pas location, the school was referred to various names from The Pas Indian Boarding School in the beginning in 1914 to the MacKay Indian Residential School when its operations at this location ceased in 1933. To operate, the school received financial resources from the Government of Canada. Functioning as a boarding school, the MacKay Indian Residential School was operated and managed by the Anglican Bishop and [[Diocese of Saskatchewan]] with a mix of church bodies overseeing it during its first eight years of existence and later transferring to the Missionary Society of the Church of England in Canada at a later date in 1922 until 1933.
+During its existence at The Pas location, the school was referred to various names from The Pas Indian Boarding School in the beginning in 1914 to the MacKay Indian Residential School when its operations at this location ceased in 1933. To operate, the school received financial resources from the Government of Canada. Functioning as a boarding school, the MacKay Indian Residential School was operated and managed by the Anglican Bishop and [[Diocese of Saskatchewan]] with a mix of church bodies overseeing it during its first eight years of existence and later transferring to
+
+Source 4: List of youth detention center incidents in Ontario: Difference between revisions - Wikipedia
+Published: 2026-02-09T00:00:00.000Z
+URL: https://en.wikipedia.org/wiki/Special%3ADiff%2F1337574204
+
+Revision as of 01:02, 10 February 2026 edit Good actions only contribs 4,289 edits
+Revision as of 07:31, 10 February 2026 edit undo 63,953 edits
+m →Paola Rosales: Tag non-HTML Bare URLs ===Paola Rosales===
+On July 3 2001, fourteen-year-old Paola Rosales after being charged with [[assault]], she hanged herself at a youth detention centre in [[Milton, Ontario]]. {{cite web |title=June 2003 OACAS Journal – Page 16 |url= |publisher=Ontario Association of Children's Aid Societies |access-date=9 February 2026}}
+On July 3 2001, fourteen-year-old Paola Rosales after being charged with [[assault]], she hanged herself at a youth detention centre in [[Milton, Ontario]]. {{Bare URL PDF|date=February 2026}} {{cite web |title=June 2003 OACAS Journal – Page 16 |url= |publisher=Ontario Association of Children's Aid Societies |access-date=9 February 2026}}
+Revision as of 07:31, 10 February 2026
+This is a listing of reported incidents in past and present youth detention centers in Ontario Canada including abuse allegations, suicides and deaths, strip searches segregation practices, lawsuits and more.
+The Ontario Youth Segregation Class Action lawsuit includes everyone who, while under the age of 18, were placed in segregation for more than 6 hours between April 1, 2004 and December 17, 2018 at these Ontario Youth detention facilities:
+- Bluewater Youth Centre - Brookside Youth Centre - Cecil Facer Youth Centre
+- Justice Ronald Lester Youth Centre
+- Roy McMurtry Youth Centre - Sprucedale Youth Centre - Toronto Youth Assessment Centre The settlement was approved on October 14, 2021. $15 million was paid out, with compensation ranging from $1,000 to $40,000 per qualifying segregation placement, depending on duration. the claims period closed on August 26, 2022. [1][2]
+There is a proposed class action that alleges that Ontario routinely conducted unlawful and degrading strip searches of youth in juvenile detention. The claim covers all minors strip searched while detained in Ontario youth justice facilities from January 1, 2000 onward. The lawsuit argues that these searches were often conducted without lawful grounds, in violation of the [Youth Criminal Justice
+
+Source 5: The Scourge (video game) - Wikipedia
+Published: 2026-04-06T00:00:00.000Z
+URL: https://en.wikipedia.org/wiki/The_Scourge_(video_game)
+
+The Scourge (Vietnamese is a first-person Horror game video game with elements of adventure and puzzle inspired by Vietnamese urban legends from the 1990s The game was co-developed by Vietnamese[3] company Rare Reversee - also the game's publisher - and Beaztek Studio. Set in Ho Chi Minh City between the 1970s and 1990s the game follows Nhật Huy, a young man who is inadvertently drawn into strange phenomena at Phong Xích Lan apartment building which then opens up a journey to investigate the mysterious death of his entire family. However, the deeper he digs, the more horrifying truths he discovers behind his family's past and the entire apartment building.
+The Scourge is an intense first-person horror game that combines adventure puzzle and survival gameplay Players take on the role of Lê Đặng Nhật Huy – a young man who returns to his old apartment building to investigate the mysteries surrounding the deaths of his parents and younger sister. During his investigation, he becomes increasingly involved in a series of terrifying supernatural phenomena occurring right where he lives.
+Throughout the game, players control Nhật Huy as he moves through the dark corridors and cramped spaces of the building, collecting items, reading documents, and solving puzzles to unlock new areas and gradually uncover previously hidden secrets. Without weapons for self-defense players must rely on their observation skills, quick reflexes, and logical thinking to survive. Simultaneously, the gameplay reveals pieces of Nhật Huy's family past, leading to horrifying truths behind
+The game's opening scene takes place on the morning of January 26, 2009, after the parents of Lê Đặng Nhật Huy[b] passed away in a traffic accident the previous night. At that time, in the Phong Xích Lan apartment complex Nhật Huy is holding a funeral for his parents, ignoring the gossip of his neighbors. During the funeral, he suddenly sees an illusion of Lê Đặng Nhật Huyên - his younger sister who had passed away previously. She appears covered in blood holding her own funeral portrait to cover her face and repeatedly reaching out for help. After seeing the illusion, Nhật Huy finds himself in a surreal hallway leading to a 's table. According to the , to find messages from the deceased, he must enter a state called a lucid dream a place where he can be aware that he is dreaming and actively navigate his actions within it. After she finishes speaking, he appears in another hallway to receive insurance money after his parents' death, but the money he receives turns out to be stacks of hell money. Finally, he wakes up and finds himself sitting in front of a laptop The screen displays a Zalo chat group named "Cô Phương's Fortune Telling Group" with 29 members, in which Cô Phương is the fortune teller he had met and the he saw in his dream. Cô Phương instructs Nhật Huy and the other members that they need to practice every day; before dreaming, they must set their clocks record what they dreamed about, and most importantly, they must absolutely not touch anyone in the dream, as that could lead to serious consequences, including breaking the boundary between the real world and the spiritual world. Among the messages sent, it can be seen that Nhật Huy has dropped out of school, taken out high-interest lo
+

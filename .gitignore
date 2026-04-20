@@ -53,3 +53,5 @@ video_output_v2/
 .env
 video-output/
 legacy/
+app/models/*
+.env
